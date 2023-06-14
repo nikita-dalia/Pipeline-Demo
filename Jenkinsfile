@@ -4,11 +4,10 @@ import java.io.OutputStreamWriter
 import java.lang.String
 import groovy.transform.Field
 import jenkins.model.*
-import java.io.FileReader;
-import java.util.Iterator;
+import java.io.FileReader
+import java.util.Iterator
 import java.util.Map
 import groovy.io.FileType
-import com.sun.net.ssl.HttpsURLConnection;
 import groovy.json.JsonSlurperClassic
 
 def ZIP_NODE
