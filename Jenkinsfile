@@ -66,7 +66,7 @@ pipeline {
 					
 					zip_workflowfilepath ="${env.WORKSPACE}/${ZIP_WORKFLOW}"
 					
-					println(zip_workflowfilepath)
+					println(jsonIncludefilepath)
 				}
 
 			}
