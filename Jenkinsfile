@@ -22,6 +22,7 @@ def ZIP_WORKFLOW
  String zipfilepath
  String zip_workflowfilepath
  String includefilenames
+ String includedfile
  String filedata
  def jsonIncludefilepath 
  def postdeploymentfilepath
@@ -82,7 +83,6 @@ pipeline {
                          def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
                          includefilenames = InputIncludeJSON.filename
                          String[] arrOfIncludedfiles = includefilenames.split(","); 
-						 def includedfile=""
                          for(int i=0; i< arrOfIncludedfiles.length; i++)
                            {
                                 def includedfileoutput  = "--include"+"=*"+arrOfIncludedfiles[i]-'['-']'-' '+"*";
