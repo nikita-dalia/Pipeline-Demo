@@ -82,6 +82,7 @@ pipeline {
                          def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
                          includefilenames = InputIncludeJSON.filename
                          String[] arrOfIncludedfiles = includefilenames.split(","); 
+						 def includedfile=""
                          for(int i=0; i< arrOfIncludedfiles.length; i++)
                            {
                                 def includedfileoutput  = "--include"+"=*"+arrOfIncludedfiles[i]-'['-']'-' '+"*";
