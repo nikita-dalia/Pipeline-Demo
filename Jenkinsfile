@@ -74,6 +74,34 @@ pipeline {
 		stage("Prepare Package"){
 			steps{
 				echo "Preparing Package Stage..."
+				script {
+                     
+                     try{
+                         
+                         def inputeIncludeFile = new File("${jsonIncludefilepath}")
+                         def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
+                         includefilenames = InputIncludeJSON.filename
+                         String[] arrOfIncludedfiles = includefilenames.split(","); 
+                         for(int i=0; i< arrOfIncludedfiles.length; i++)
+                           {
+                                def includedfileoutput  = "--include"+"=*"+arrOfIncludedfiles[i]-'['-']'-' '+"*";
+                    
+                                   includedfile = includedfile+includedfileoutput+" "
+                                 //  println("data["+i+"] : "+arrOfIncludedfiles[i])
+                          }
+                          
+                        }catch(Exception e) {
+                       }
+                
+                      //  println(includefilenames)
+                      if(includefilenames != null && !includefilenames.isEmpty()){
+                           sh "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && rm -rf *.zip && zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
+        
+                       }else{
+                            sh "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && rm -rf *.zip && zip -r --exclude=*deployment-artifacts* --exclude=*postdeployment* ${ZIP_NODE} * && chmod 777 ${ZIP_NODE}" 
+                       }
+                       
+             		} 
 			}
 		}
 	}
