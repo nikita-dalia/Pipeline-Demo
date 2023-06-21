@@ -78,11 +78,15 @@ pipeline {
 				script {
                      
                      try{
-                         
+                         println(1)
                          def inputeIncludeFile = new File("${jsonIncludefilepath}")
+		     		println(2)
                          def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
+			     println(3)
                          includefilenames = InputIncludeJSON.filename
+			     println(4)
                          String[] arrOfIncludedfiles = includefilenames.split(","); 
+			     println(5)
                          for(int i=0; i< arrOfIncludedfiles.length; i++)
                            {
                                 def includedfileoutput  = "--include"+"=*"+arrOfIncludedfiles[i]-'['-']'-' '+"*";
@@ -90,11 +94,13 @@ pipeline {
                                    includedfile = includedfile+includedfileoutput+" "
                                  //  println("data["+i+"] : "+arrOfIncludedfiles[i])
                           }
+			     println(6)
                           
                         }catch(Exception e) {
+			     println(7)
                        }
-                
-                      //  println(includefilenames)
+                println(8)
+	                      //  println(includefilenames)
                       if(includefilenames != null && !includefilenames.isEmpty()){
                            sh "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && rm -rf *.zip && zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
         
