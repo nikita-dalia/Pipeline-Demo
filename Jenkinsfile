@@ -103,7 +103,7 @@ pipeline {
 	                      //  println(includefilenames)
                       if(includefilenames != null && !includefilenames.isEmpty()){
 			      println(9)
-			      println($ZIP_NODE)
+			      println(ZIP_NODE)
                            sh "echo ${ZIP_NODE}"
 				sh "echo 'remove alraedy existing zip files'"
 			      sh "rm -rf *.zip"
