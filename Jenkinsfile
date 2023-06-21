@@ -110,10 +110,10 @@ pipeline {
                             sh "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && rm -rf *.zip && zip -r --exclude=*deployment-artifacts* --exclude=*postdeployment* ${ZIP_NODE} * && chmod 777 ${ZIP_NODE}" 
                       		println(12)
 		      }
+					println(13)
                        
              		} 
 			}
-			println(13)
 		}
 	}
 }
