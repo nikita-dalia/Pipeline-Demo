@@ -106,7 +106,7 @@ pipeline {
 			      println(9)
 			      println(ZIP_NODE)
                            echo "gello"
-			      echo ${ZIP_NODE}
+			      echo "${ZIP_NODE}"
 				echo 'remove alraedy existing zip files'
 			     // sh "rm -rf *.zip"
 			      println(14)
