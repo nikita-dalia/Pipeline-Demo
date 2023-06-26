@@ -108,7 +108,7 @@ pipeline {
                            echo "gello"
 			      echo "${ZIP_NODE}"
 				echo 'remove alraedy existing zip files'
-			     sh "rm -rf *.zip"
+			     sh "del /S /Q *.zip"
 			      println(14)
 			      //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
         println(10)
