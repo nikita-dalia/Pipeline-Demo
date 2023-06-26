@@ -106,10 +106,10 @@ pipeline {
 			      println(9)
 			      println(ZIP_NODE)
                            sh "echo ${ZIP_NODE}"
-				sh "echo 'remove alraedy existing zip files'"
-			      sh "rm -rf *.zip"
+				//sh "echo 'remove alraedy existing zip files'"
+			     // sh "rm -rf *.zip"
 			      println(14)
-			      sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
+			      //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
         println(10)
                        }else{
 			     println(11) 
