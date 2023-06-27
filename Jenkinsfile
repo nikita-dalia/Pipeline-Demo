@@ -110,7 +110,7 @@ pipeline {
 						 echo 'remove alraedy existing zip files'
 						 bat "del /S /Q *.zip"
 						 println(14)
-						 println(includefile)
+						 println(includedfile)
 						 bat "powershell.exe -Command Compress-Archive -Path .\${includedfile} -DestinationPath ${ZIP_NODE}.zip -CompressionLevel Optimal; icacls ${ZIP_NODE}.zip /grant Everyone:F"
 			      		 //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
         				 println(10)
