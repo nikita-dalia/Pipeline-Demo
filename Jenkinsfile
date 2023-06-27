@@ -184,7 +184,7 @@ pipeline {
                      --header 'x-ms-blob-type: ${env.xmsblobtype}' \
                      --header 'Content-Type: application/zip' \
                      --data-binary '@${zipfilepath}'"""*/
-					 bat '''
+					 /*bat '''
 					 	curl -v -X PUT %fileuploadUrl% ^
 						--header "x-ms-meta-x_rdp_userroles: systemadmin" ^
 						--header "x-ms-meta-x_rdp_tenantid: etronds" ^
@@ -197,7 +197,8 @@ pipeline {
 						--header "x-ms-blob-type: guid" ^
 						--header "Content-Type: application/zip" ^
 						--data-binary @%zipfilepath%
-					 '''
+					 '''*/
+					 bat "curl -v -X PUT "+${fileuploadUrl}+" ^"
                   }    
             }
         }
