@@ -127,7 +127,7 @@ pipeline {
 			steps{
 				script{
 					def jsonobject = "{\"binaryStreamObject\":{\"id\":\"guid\",\"type\":\"seedDataStream\",\"properties\":{\"objectKey\":\"main.zip\",\"originalFileName\":\"main.zip\"}}}"
-                    def post = new URL("etronds.riversand.com/api/binarystreamobjectservice/prepareUpload").openConnection();
+                    def post = new URL("https://etronds.riversand.com/api/binarystreamobjectservice/prepareUpload").openConnection();
                     def message = '{"message":"this is a message"}'
                     post.setRequestMethod("POST")
                     post.setDoOutput(true)
