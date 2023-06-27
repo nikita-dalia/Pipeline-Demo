@@ -196,7 +196,7 @@ pipeline {
 						--header "x-ms-meta-binarystreamobjectid: guid" ^
 						--header "x-ms-blob-type: guid" ^
 						--header "Content-Type: application/zip" ^
-						--data-binary C:\ProgramData\Jenkins\.jenkins\workspace\Jenkins_Pipeline_Tutorial_1_main\main.zip
+						--data-binary "@%zipfilepath%"
 					 '''
                   }    
             }
