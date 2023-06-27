@@ -81,13 +81,13 @@ pipeline {
                      try{
                          println(1)
                          def inputeIncludeFile = new File("${jsonIncludefilepath}")
-		     		println(2)
+						 println(2)
                          def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
-			     println(3)
+			     			println(3)
                          includefilenames = InputIncludeJSON.filename
-			     println(4)
+			     		 println(4)
                          String[] arrOfIncludedfiles = includefilenames.split(","); 
-			     println(5)
+			     		 println(5)
                          for(int i=0; i< arrOfIncludedfiles.length; i++)
                            {
                                 def includedfileoutput  = "--include"+"=*"+arrOfIncludedfiles[i]-'['-']'-' '+"*";
@@ -95,31 +95,31 @@ pipeline {
                                    includedfile = includedfile+includedfileoutput+" "
                                  //  println("data["+i+"] : "+arrOfIncludedfiles[i])
                           }
-			     println(6)
+			     		 println(6)
                           
                         }catch(Exception e) {
-			     println(7)
+					 println(7)
                        }
-                println(8)
+                	 println(8)
 	                      //  println(includefilenames)
                       if(includefilenames != null && !includefilenames.isEmpty()){
-			      println(9)
-			      println(ZIP_NODE)
-                           echo "gello"
-			      echo "${ZIP_NODE}"
-				echo 'remove alraedy existing zip files'
-			     bat "del /S /Q *.zip"
-			      println(14)
-			      //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
-        println(10)
+						 println(9)
+						 println(ZIP_NODE)
+						 echo "gello"
+						 echo "${ZIP_NODE}"
+						 echo 'remove alraedy existing zip files'
+						 bat "del /S /Q *.zip"
+						 println(14)
+						 bat "powershell.exe -Command 'Compress-Archive -Path .\${includedfile} -DestinationPath ${ZIP_NODE}.zip -CompressionLevel Optimal; icacls ${ZIP_NODE}.zip /grant Everyone:F'"
+			      		 //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
+        				 println(10)
                        }else{
-			     println(11) 
-                            sh "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && rm -rf *.zip && zip -r --exclude=*deployment-artifacts* --exclude=*postdeployment* ${ZIP_NODE} * && chmod 777 ${ZIP_NODE}" 
-                      		println(12)
-		      }
-					println(13)
-                       
-             		} 
+			     		 println(11) 
+						 //sh "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && rm -rf *.zip && zip -r --exclude=*deployment-artifacts* --exclude=*postdeployment* ${ZIP_NODE} * && chmod 777 ${ZIP_NODE}" 
+						 println(12)
+		      			}
+						 println(13)
+				} 
 			}
 		}
 	}
