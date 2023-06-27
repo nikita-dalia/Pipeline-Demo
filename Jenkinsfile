@@ -160,7 +160,7 @@ pipeline {
                            {
                               String[] arrOfurl = arrOfStr[i].split("uploadURL=")
                               for(int p=1; p< arrOfurl.length; p++){
-                              fileuploadUrl = arrOfurl[p]-'}}]'	
+                              fileuploadUrl = arrOfurl[p]-"}}]"	
                                println("data["+p+"] : "+arrOfurl[p])
                           }
                          }
@@ -168,5 +168,39 @@ pipeline {
 				}
 			}
 		}
+		stage('Deploying folder'){
+            steps{
+                script{
+                     echo "====Deploying folder====="
+                    /*sh """ curl -v -X PUT '${fileuploadUrl}' \
+                     --header 'x-ms-meta-x_rdp_userroles: ${env.xrdpuserRoles}' \
+                     --header 'x-ms-meta-x_rdp_tenantid: ${params.TENANT_ID}' \
+                     --header 'x-ms-meta-originalfilename: ${ZIP_NODE}' \
+                     --header 'x-ms-blob-content-disposition: attachment; filename=${ZIP_NODE}' \
+                     --header 'x-ms-meta-type: ${env.xmsmetatype}' \
+                     --header 'x-ms-meta-x_rdp_clientid: ${params.XRDP_CLIENT_ID}' \
+                     --header 'x-ms-meta-x_rdp_userid: ${params.USER_ID}' \
+                     --header 'x-ms-meta-binarystreamobjectid: ${env.xmsmetabinarystreamobjectid}' \
+                     --header 'x-ms-blob-type: ${env.xmsblobtype}' \
+                     --header 'Content-Type: application/zip' \
+                     --data-binary '@${zipfilepath}'"""*/
+					 bat '''
+					 	curl -v -X PUT "%fileuploadUrl%" ^
+						--header "x-ms-meta-x_rdp_userroles: systemadmin" ^
+						--header "x-ms-meta-x_rdp_tenantid: etronds" ^
+						--header "x-ms-meta-originalfilename: main.zip" ^
+						--header "x-ms-blob-content-disposition: attachment; filename=main.zip" ^
+						--header "x-ms-meta-type: seedDataStream" ^
+						--header "x-ms-meta-x_rdp_clientid: rdpclient" ^
+						--header "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com" ^
+						--header "x-ms-meta-binarystreamobjectid: guid" ^
+						--header "x-ms-blob-type: guid" ^
+						--header "Content-Type: application/zip" ^
+						--data-binary C:\ProgramData\Jenkins\.jenkins\workspace\Jenkins_Pipeline_Tutorial_1_main\main.zip
+					 '''
+                  }    
+            }
+        }
+
 	}
 }
