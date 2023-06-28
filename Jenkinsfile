@@ -198,7 +198,20 @@ pipeline {
 						--header "Content-Type: application/zip" ^
 						--data-binary @%zipfilepath%
 					 '''*/
-					 bat "curl -v -X PUT "+${fileuploadUrl}+" ^"
+					 bat """
+							curl -v -X PUT '%fileuploadUrl%' ^
+								--header 'x-ms-meta-x_rdp_userroles: systemadmin ^
+								--header 'x-ms-meta-x_rdp_tenantid: etronds' ^
+								--header 'x-ms-meta-originalfilename: main.zip' ^
+								--header 'x-ms-blob-content-disposition: attachment; filename=main.zip' ^
+								--header 'x-ms-meta-type: seedDataStream' ^
+								--header 'x-ms-meta-x_rdp_clientid: rdpclient' ^
+								--header 'x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com' ^
+								--header 'x-ms-meta-binarystreamobjectid: guid' ^
+								--header 'x-ms-blob-type: BlockBlob' ^
+								--header 'Content-Type: application/zip' ^
+								--data-binary '@%zipfilepath%'
+							"""
                   }    
             }
         }
