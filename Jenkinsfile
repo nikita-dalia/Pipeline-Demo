@@ -198,6 +198,8 @@ pipeline {
 						--header "Content-Type: application/zip" ^
 						--data-binary @%zipfilepath%
 					 '''*/
+					 println(fileuploadUrl)
+					 println(zipfilepath)
 					 bat """
 							curl -v -X PUT '%fileuploadUrl%' ^
 								--header 'x-ms-meta-x_rdp_userroles: systemadmin ^
