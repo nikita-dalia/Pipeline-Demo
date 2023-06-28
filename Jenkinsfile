@@ -70,6 +70,7 @@ pipeline {
 					
 					println(jsonIncludefilepath)
 					println(ZIP_NODE)
+					println(env.WORKSPACE)
 				}
 
 			}
