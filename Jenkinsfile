@@ -214,7 +214,7 @@ pipeline {
 								--header 'x-ms-meta-binarystreamobjectid: guid' ^
 								--header 'x-ms-blob-type: BlockBlob' ^
 								--header 'Content-Type: application/zip' ^
-								--data-binary "@${zipfilepath}"
+								--data-urlencode "@${zipfilepath}"
 							"""
                   }    
             }
