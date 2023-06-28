@@ -118,7 +118,7 @@ pipeline {
                  //bat "powershell.exe -Command Compress-Archive -Path '.\\rock-business-actions_thing_admin_pmi.json' -DestinationPath main.zip -CompressionLevel Optimal; icacls 'main.zip' /grant Everyone:F"
                    //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
 				   bat """
-					zip -r "${includedfile}" --exclude=*.git* --exclude=*/.* "${ZIP_NODE}" . && attrib +r "${ZIP_NODE}"
+					7z a -r "${ZIP_NODE}" * -x!*.git* -x!*/.*
 					"""
                  println(10)
                }else{
