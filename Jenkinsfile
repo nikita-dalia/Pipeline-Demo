@@ -115,11 +115,10 @@ pipeline {
                  bat "del /S /Q *.zip"
                  println(14)
                  println(includedfile)
-                 //bat "powershell.exe -Command Compress-Archive -Path '.\\rock-business-actions_thing_admin_pmi.json' -DestinationPath main.zip -CompressionLevel Optimal; icacls 'main.zip' /grant Everyone:F"
-                   //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
-				   bat """
-					7z a -r "${ZIP_NODE}" * -x!*.git* -x!*/.*
+                 bat """
+					powershell.exe -Command "Compress-Archive -Path '.\\rock-business-actions_thing_admin_pmi.json' -DestinationPath '${ZIP_NODE}' -CompressionLevel Optimal; icacls '${ZIP_NODE}' /grant Everyone:F"
 					"""
+                   //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
                  println(10)
                }else{
                   println(11) 
