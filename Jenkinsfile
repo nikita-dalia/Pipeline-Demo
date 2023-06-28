@@ -72,6 +72,7 @@ pipeline {
 					println(ZIP_NODE)
 					println(env.WORKSPACE)
 					println(zipfilepath)
+					println(env.JOB_NAME)
 				}
 
 			}
