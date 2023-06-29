@@ -58,7 +58,7 @@ pipeline {
 				script{
 				
 					echo "Initialization starting..."
-					ZIP_NODE="${env.JOB_NAME}.zip"
+					ZIP_NODE="${env.BRANCH_NAME}.zip"
 					ZIP_WORKFLOW="postdeployment.zip"
 
 					jsonIncludefilepath = "${env.WORKSPACE}/deployment-artifacts/includedfile.json"
@@ -72,7 +72,7 @@ pipeline {
 					println(ZIP_NODE)
 					println(env.WORKSPACE)
 					println(zipfilepath)
-					println(env.JOB_NAME)
+					println(env.BRANCH_NAME)
 				}
 
 			}
