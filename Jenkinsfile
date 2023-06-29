@@ -116,7 +116,7 @@ pipeline {
 					del /F /Q *.zip
 					"""
                 bat """
-                    powershell.exe -Command "Compress-Archive -Path .\\${includedfile} -DestinationPath '..\\${ZIP_NODE}' -CompressionLevel Optimal; attrib +r '..\\${ZIP_NODE}'"
+                    powershell.exe -Command "Compress-Archive -Path .\\${includedfile} -DestinationPath '${ZIP_NODE}' -CompressionLevel Optimal; attrib +r '${ZIP_NODE}'"
                     """
                    //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
                  println(10)
