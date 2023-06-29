@@ -111,11 +111,12 @@ pipeline {
                  println(ZIP_NODE)
                  echo "gello"
                  bat """
-                    echo %ZIP_NODE%
-                    echo 'remove already existing zip files'
-                    del /F /Q *.zip
-                    7z a -r "${includedfile}" -x!*.git* -x!*/.* "${ZIP_NODE}" .
-                    attrib +r "${ZIP_NODE}"
+					echo ${ZIP_NODE}
+					echo 'remove already existing zip files'
+					del /F /Q *.zip
+					"""
+                bat """
+                    powershell.exe -Command "Compress-Archive -Path .\\${includedfile} -DestinationPath '${ZIP_NODE}' -CompressionLevel Optimal; attrib +r '${ZIP_NODE}'"
                     """
                    //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
                  println(10)
