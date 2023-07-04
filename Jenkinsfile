@@ -79,7 +79,7 @@ pipeline {
             stage('prepare-package') {
             steps {
                 script {
-                    try{
+                    /*try{
                         def inputeIncludeFile = new File("${jsonIncludefilepath}")
                         def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
                         includefilenames = InputIncludeJSON.filename
@@ -90,7 +90,11 @@ pipeline {
                         }
                         println("includedfile variable done:"+includedfile)
                     } catch(Exception e) {
-                    }
+                    }*/
+                    def inputeIncludeFile = new File("${jsonIncludefilepath}")
+                        def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
+                        includefilenames = InputIncludeJSON.filename
+                        String[] arrOfIncludedfiles = includefilenames.split(","); 
                     
                     if(includefilenames != null && !includefilenames.isEmpty()){
                         println("Running command to zip the file")
