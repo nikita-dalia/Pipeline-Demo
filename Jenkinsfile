@@ -90,12 +90,16 @@ pipeline {
                             def includedfileoutput  = "--include=*${arrOfIncludedfiles[i]}-*"
                             includedfile = includedfile + includedfileoutput + " "
                         }
+                        println("includedfile variable done:"+includedfile)
                     } catch(Exception e) {
                     }
                     
                     if(includefilenames != null && !includefilenames.isEmpty()){
+                        println("Running command to zip the file")
                         bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${includedfile} -DestinationPath ${ZIP_NODE}"
+
                     } else {
+                        println("includefilenames is empty")
                         bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * -DestinationPath ${ZIP_NODE} -Exclude deployment-artifacts/, postdeployment/"
                     }
                 } 
