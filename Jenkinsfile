@@ -78,4 +78,27 @@ pipeline {
         }
 
 	}
+    stage('prepare-package') {
+            steps {
+                script {
+                    try{
+                        def inputeIncludeFile = new File("${jsonIncludefilepath}")
+                        def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
+                        includefilenames = InputIncludeJSON.filename
+                        String[] arrOfIncludedfiles = includefilenames.split(","); 
+                        for(int i=0; i< arrOfIncludedfiles.length; i++) {
+                            def includedfileoutput  = "--include=*${arrOfIncludedfiles[i]}-*"
+                            includedfile = includedfile + includedfileoutput + " "
+                        }
+                    } catch(Exception e) {
+                    }
+                    
+                    if(includefilenames != null && !includefilenames.isEmpty()){
+                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${includedfile} -DestinationPath ${ZIP_NODE}"
+                    } else {
+                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * -DestinationPath ${ZIP_NODE} -Exclude deployment-artifacts/, postdeployment/"
+                    }
+                } 
+            }
+        }
 }
