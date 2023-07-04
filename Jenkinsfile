@@ -10,6 +10,11 @@ import java.util.Map
 import groovy.io.FileType
 import groovy.json.JsonSlurperClassic
 import java.net.URLEncoder
+import java.util.zip.ZipOutputStream
+import java.util.zip.ZipEntry
+import java.nio.file.Files
+import java.nio.file.Paths
+
 
 def ZIP_NODE
 def ZIP_WORKFLOW
@@ -91,7 +96,7 @@ pipeline {
                         println("includedfile variable done:"+includedfile)
                     } catch(Exception e) {
                     }*/
-                    def inputeIncludeFile = new File("${jsonIncludefilepath}")
+                    /*def inputeIncludeFile = new File("${jsonIncludefilepath}")
                         def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
                         includefilenames = InputIncludeJSON.filename
                         String[] arrOfIncludedfiles = includefilenames.split(","); 
@@ -107,7 +112,48 @@ pipeline {
                     } else {
                         println("includefilenames is")
                         bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * -DestinationPath ${ZIP_NODE} -Exclude deployment-artifacts/, postdeployment/"
+                    }*/
+                    // Read the JSON file
+                    def includedFileContent = readFile("${jsonIncludefilepath}")
+
+                    // Parse the JSON content
+                    def jsonSlurper = new JsonSlurper()
+                    def json = jsonSlurper.parseText()includedFileContent
+
+                    // Extract the filenames from the JSON data
+                    def filenames = json.collect { it.filename }
+
+                    // Define the output zip file path
+                    def zipFilePath = "${ZIP_NODE}"
+
+                    // Remove the existing zip file if it exists
+                    def existingZipFile = new File(zipFilePath)
+                    if (existingZipFile.exists()) {
+                        existingZipFile.delete()
+                        echo "Existing zip file deleted."
                     }
+
+                    // Create a ZipOutputStream
+                    def zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFilePath))
+
+
+                    // Iterate over the filenames and add each file to the zip
+                    filenames.each { filename ->
+                        def file = new File(filename)
+                        if (file.exists()) {
+                            def zipEntry = new ZipEntry(file.name)
+                            zipOutputStream.putNextEntry(zipEntry)
+                            zipOutputStream.write(Files.readAllBytes(Paths.get(file.toURI())))
+                            zipOutputStream.closeEntry()
+                        } else {
+                            error "File not found: ${filename}"
+                        }
+                    }
+
+                    // Close the ZipOutputStream
+                    zipOutputStream.close()
+
+                    echo "Files zipped successfully."
                 } 
             }
         }
