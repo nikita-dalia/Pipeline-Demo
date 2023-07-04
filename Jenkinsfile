@@ -64,7 +64,7 @@ pipeline {
 					jsonIncludefilepath = "${env.WORKSPACE}/deployment-artifacts/includedfile.json"
 					postdeploymentfilepath = "${env.WORKSPACE}/postdeployment/postdeploymentconfig.json"
 							
-					zipfilepath= "${env.WORKSPACE}/${ZIP_NODE}"
+					zipfilepath= "${env.WORKSPACE}\${ZIP_NODE}"
 					
 					zip_workflowfilepath ="${env.WORKSPACE}/${ZIP_WORKFLOW}"
 					
@@ -116,7 +116,7 @@ pipeline {
 					del /F /Q *.zip
 					"""
                 bat """
-                    powershell.exe -Command "Compress-Archive -Path .\\${includedfile} -DestinationPath '${ZIP_NODE}' -CompressionLevel Optimal; attrib +r '${ZIP_NODE}'"
+                    powershell.exe -Command "Compress-Archive -Path .\\${includedfile} -DestinationPath '\${ZIP_NODE}' -CompressionLevel Optimal; attrib +r '${ZIP_NODE}'"
                     """
                    //sh "zip -r ${includedfile} --exclude=*.git* --exclude=*/.* ${ZIP_NODE} . && chmod 777 ${ZIP_NODE}"
                  println(10)
