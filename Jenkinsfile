@@ -60,12 +60,12 @@ pipeline {
                     ZIP_NODE="${env.BRANCH_NAME}.zip"
                     ZIP_WORKFLOW ="postdeployment.zip"
                     
-                    jsonIncludefilepath = "${env.WORKSPACE}\deployment-artifacts\includedfile.json"
-                    postdeploymentfilepath = "${env.WORKSPACE}\postdeployment\postdeploymentconfig.json"
+                    jsonIncludefilepath = "${env.WORKSPACE}\\deployment-artifacts\\includedfile.json"
+                    postdeploymentfilepath = "${env.WORKSPACE}\\\postdeployment\\postdeploymentconfig.json"
                          
-                    zipfilepath= "${env.WORKSPACE}\${ZIP_NODE}"
+                    zipfilepath= "${env.WORKSPACE}\\${ZIP_NODE}"
                     
-                    zip_workflowfilepath ="${env.WORKSPACE}\${ZIP_WORKFLOW}"
+                    zip_workflowfilepath ="${env.WORKSPACE}\\${ZIP_WORKFLOW}"
                     
                     println("ZIP_NODE:"+ZIP_NODE)
                     println("ZIP_WORKFLOW:"+ZIP_WORKFLOW)
