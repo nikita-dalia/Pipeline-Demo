@@ -95,10 +95,14 @@ pipeline {
                         def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
                         includefilenames = InputIncludeJSON.filename
                         String[] arrOfIncludedfiles = includefilenames.split(","); 
+                        // Convert to serializable Map
+                        def serializableIncludedFiles = arrOfIncludedfiles.collectEntries { filename ->
+                            [(filename): true]
+                        }
                     
                     if(includefilenames != null && !includefilenames.isEmpty()){
                         println("Running command to zip the file")
-                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${arrOfIncludedfiles} -DestinationPath ${ZIP_NODE}"
+                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${serializableIncludedFiles} -DestinationPath ${ZIP_NODE}"
 
                     } else {
                         println("includefilenames is")
