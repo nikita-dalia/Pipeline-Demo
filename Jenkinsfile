@@ -23,7 +23,7 @@ def ZIP_WORKFLOW
  String zipfilepath
  String zip_workflowfilepath
  String includefilenames
- String includedfile
+ String includedfile=''
  String filedata
  def jsonIncludefilepath 
  def postdeploymentfilepath
