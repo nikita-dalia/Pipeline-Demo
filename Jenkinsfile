@@ -139,7 +139,7 @@ pipeline {
 
                     // Iterate over the filenames and add each file to the zip
                     filenames.each { filename ->
-                        def file = new File(filename)
+                        def file = new File("${env.WORKSPACE}/${filename}")
                         if (file.exists()) {
                             def zipEntry = new ZipEntry(file.name)
                             zipOutputStream.putNextEntry(zipEntry)
