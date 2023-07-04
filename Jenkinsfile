@@ -118,7 +118,7 @@ pipeline {
 
                     // Parse the JSON content
                     def jsonSlurper = new JsonSlurper()
-                    def json = jsonSlurper.parseText()includedFileContent
+                    def json = jsonSlurper.parseText(includedFileContent)
 
                     // Extract the filenames from the JSON data
                     def filenames = json.collect { it.filename }
