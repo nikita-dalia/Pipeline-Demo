@@ -76,9 +76,7 @@ pipeline {
                 }
             }
         }
-
-	}
-    stage('prepare-package') {
+            stage('prepare-package') {
             steps {
                 script {
                     try{
@@ -99,10 +97,12 @@ pipeline {
                         bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${includedfile} -DestinationPath ${ZIP_NODE}"
 
                     } else {
-                        println("includefilenames is empty")
+                        println("includefilenames is")
                         bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * -DestinationPath ${ZIP_NODE} -Exclude deployment-artifacts/, postdeployment/"
                     }
                 } 
             }
         }
+
+	}
 }
