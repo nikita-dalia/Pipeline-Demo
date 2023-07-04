@@ -94,7 +94,7 @@ pipeline {
                     
                     if(includefilenames != null && !includefilenames.isEmpty()){
                         println("Running command to zip the file")
-                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${includedfile} -DestinationPath ${ZIP_NODE}"
+                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${arrOfIncludedfiles} -DestinationPath ${ZIP_NODE}"
 
                     } else {
                         println("includefilenames is")
