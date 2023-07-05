@@ -117,11 +117,12 @@ pipeline {
                     def includedFileContent = readFile("${jsonIncludefilepath}")
 
                     // Parse the JSON content
-                    def jsonSlurper = new JsonSlurper()
+                    def jsonSlurper = new groovy.json.JsonSlurper()
                     def json = jsonSlurper.parseText(includedFileContent)
 
                     // Extract the filenames from the JSON data
                     def filenames = json.collect { it.filename }
+                    filenames = filenames as List
 
                     // Define the output zip file path
                     def zipFilePath = "${ZIP_NODE}"
@@ -153,6 +154,10 @@ pipeline {
                     }*/
                     def zipCommand = "powershell -Command \"Compress-Archive -Path @('${env.WORKSPACE}\\' + filenames.join('\', '${env.WORKSPACE}\\')) -DestinationPath '${zipFilePath}'\""
                     bat zipCommand
+
+                    // Check if the zip file was created successfully
+                    bat "if not exist ${zipFilePath} exit 1"
+                    
                     // Close the ZipOutputStream
                     //zipOutputStream.close()
 
