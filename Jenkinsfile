@@ -31,8 +31,15 @@ pipeline {
             steps {
                 script {
                     def includedFileContent = readFile(jsonIncludefilepath)
-                    def includedFiles = new JsonSlurper().parseText(includedFileContent).toMap()
+                    def includedFiles = new JsonSlurper().parseText(includedFileContent)
+
+                    // Convert ArrayList to Map manually
                     def filenames = includedFiles.collect { it.filename }
+                    def fileMap = [:]
+                    filenames.eachWithIndex { filename, index ->
+                        fileMap[index] = filename
+                    }
+
                     def filenamesString = filenames.join(' ')
 
                     bat "powershell.exe -Command \"Compress-Archive -Path ${filenamesString} -DestinationPath ${zipfilepath}\""
