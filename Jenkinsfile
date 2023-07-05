@@ -86,7 +86,8 @@ pipeline {
                 script {
                     // Read filenames from includedfile.json
                     def includedFileContent = readFile("${jsonIncludefilepath}")
-                    def includedFiles = readJSON text: includedFileContent
+                    def jsonSlurper = new groovy.json.JsonSlurper()
+                    def includedFiles = jsonSlurper.parseText(includedFileContent)
 
                     // Create a list to store the filenames
                     def filenames = []
