@@ -1,10 +1,40 @@
 import groovy.json.JsonSlurper
+import groovy.json.*
+import java.io.OutputStreamWriter
+import java.lang.String
+import groovy.transform.Field
+import jenkins.model.*
+import java.io.FileReader;
+import java.util.Iterator;
+import java.util.Map
+import groovy.io.FileType
+import com.sun.net.ssl.HttpsURLConnection;
+import groovy.json.JsonSlurperClassic
 
-def ZIP_NODE
-def ZIP_WORKFLOW
-def jsonIncludefilepath
-def zipfilepath
-def zip_workflowfilepath
+
+ def ZIP_NODE
+ def ZIP_WORKFLOW
+ 
+ def jsonResponse
+ String fileuploadUrl
+ String postuploadfileuploadUrl
+ def list = []
+
+ String taskID
+ String zipfilepath
+ String zip_workflowfilepath
+ String includefilenames
+ String filedata
+ def jsonIncludefilepath 
+ def postdeploymentfilepath
+ def statuscode
+ def objectstatus
+ def objectsecondstatus
+ String statusDetail1msg ="";
+ def status_final
+ 
+ def statusvalue
+String includedfile="";
 
 pipeline {
     agent any
@@ -30,18 +60,15 @@ pipeline {
         stage('prepare-package') {
             steps {
                 script {
-                    def includedFileContent = readFile(jsonIncludefilepath)
-                    def includedFiles = new JsonSlurper().parseText(includedFileContent)
-
-                    // Extract the necessary information into a serializable data structure
-                    def filenames = includedFiles.collect { it.filename }
-
-                    def filenamesString = filenames.join(' ')
-
-                    bat "powershell.exe -Command \"Compress-Archive -Path ${filenamesString} -DestinationPath ${zipfilepath}\""
-                    if (!fileExists(ZIP_NODE)) {
-                        error("Failed to create the zip file.")
+                    def includedFileObject=new File("${jsonIncludefilepath}")
+                    def includedFileJSONObject=new JsonSlurper().parse(includedFileObject)
+                    def includedFilenamesString=includedFileJSONObject.filename
+                    String[] arrOfIncludedFilenames= includedFilenamesString.split(",");
+                    for(int i=0;i<arrOfIncludedFilenames.length,i++)
+                    {
+                        includedfile +=arrOfIncludedFilenames[i]+" "
                     }
+                    println("Final included files:"+includedfile)
                 }
             }
         }
