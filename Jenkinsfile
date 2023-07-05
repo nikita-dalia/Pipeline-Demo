@@ -128,18 +128,20 @@ pipeline {
 
                     // Remove the existing zip file if it exists
                     def existingZipFile = new File(zipFilePath)
-                    if (existingZipFile.exists()) {
+                    /*if (existingZipFile.exists()) {
                         existingZipFile.delete()
                         echo "Existing zip file deleted."
-                    }
+                    }*/
+                    bat "if exist ${zipFilePath} del ${zipFilePath}"
 
                     // Create a ZipOutputStream
-                    def zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFilePath))
+                   // def zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFilePath))
 
 
                     // Iterate over the filenames and add each file to the zip
-                    filenames.each { filename ->
+                    /*filenames.each { filename ->
                         def file = new File("${env.WORKSPACE}/${filename}")
+                        println("${env.WORKSPACE}/${filename}")
                         if (file.exists()) {
                             def zipEntry = new ZipEntry(file.name)
                             zipOutputStream.putNextEntry(zipEntry)
@@ -148,10 +150,11 @@ pipeline {
                         } else {
                             error "File not found: ${filename}"
                         }
-                    }
-
+                    }*/
+                    def zipCommand = "powershell -Command \"Compress-Archive -Path @('${env.WORKSPACE}\\' + filenames.join('\', '${env.WORKSPACE}\\')) -DestinationPath '${zipFilePath}'\""
+                    bat zipCommand
                     // Close the ZipOutputStream
-                    zipOutputStream.close()
+                    //zipOutputStream.close()
 
                     echo "Files zipped successfully."
                 } 
