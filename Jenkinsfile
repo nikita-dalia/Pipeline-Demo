@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     def includedFileContent = readFile(jsonIncludefilepath)
-                    def includedFiles = new JsonSlurper().parseText(includedFileContent)
+                    def includedFiles = new JsonSlurper().parseText(includedFileContent).toMap()
                     def filenames = includedFiles.collect { it.filename }
                     def filenamesString = filenames.join(' ')
 
