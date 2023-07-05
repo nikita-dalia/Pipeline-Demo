@@ -84,85 +84,30 @@ pipeline {
             stage('prepare-package') {
             steps {
                 script {
-                    /*try{
-                        def inputeIncludeFile = new File("${jsonIncludefilepath}")
-                        def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
-                        includefilenames = InputIncludeJSON.filename
-                        String[] arrOfIncludedfiles = includefilenames.split(","); 
-                        for(int i=0; i< arrOfIncludedfiles.length; i++) {
-                            def includedfileoutput  = "--include=*${arrOfIncludedfiles[i]}-*"
-                            includedfile = includedfile + includedfileoutput + " "
-                        }
-                        println("includedfile variable done:"+includedfile)
-                    } catch(Exception e) {
-                    }*/
-                    /*def inputeIncludeFile = new File("${jsonIncludefilepath}")
-                        def InputIncludeJSON = new JsonSlurper().parse(inputeIncludeFile)
-                        includefilenames = InputIncludeJSON.filename
-                        String[] arrOfIncludedfiles = includefilenames.split(","); 
-                        // Convert to serializable Map
-                        def serializableIncludedFiles = arrOfIncludedfiles.collectEntries { filename ->
-                            [(filename): true]
-                        }
-                    
-                    if(includefilenames != null && !includefilenames.isEmpty()){
-                        println("Running command to zip the file")
-                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * ${serializableIncludedFiles} -DestinationPath ${ZIP_NODE}"
-
-                    } else {
-                        println("includefilenames is")
-                        bat "echo ${ZIP_NODE} && echo 'remove alraedy existing zip files' && del *.zip && powershell Compress-Archive -Path * -DestinationPath ${ZIP_NODE} -Exclude deployment-artifacts/, postdeployment/"
-                    }*/
-                    // Read the JSON file
+                    // Read filenames from includedfile.json
                     def includedFileContent = readFile("${jsonIncludefilepath}")
+                    def includedFiles = readJSON text: includedFileContent
 
-                    // Parse the JSON content
-                    def jsonSlurper = new groovy.json.JsonSlurper()
-                    def json = jsonSlurper.parseText(includedFileContent)
+                    // Create a list to store the filenames
+                    def filenames = []
 
-                    // Extract the filenames from the JSON data
-                    def filenames = json.collect { it.filename }
-                    filenames = filenames as List
+                    // Extract filenames from includedFiles
+                    includedFiles.each { file ->
+                        filenames.add(file.filename)
+                    }
 
-                    // Define the output zip file path
-                    def zipFilePath = "${ZIP_NODE}"
+                    // Join filenames using space as separator
+                    def filenamesString = filenames.join(' ')
 
-                    // Remove the existing zip file if it exists
-                    def existingZipFile = new File(zipFilePath)
-                    /*if (existingZipFile.exists()) {
-                        existingZipFile.delete()
-                        echo "Existing zip file deleted."
-                    }*/
-                    bat "if exist ${zipFilePath} del ${zipFilePath}"
+                    // Create the zip file using Windows CMD
+                    bat "cd ${WORKSPACE} && powershell -Command \"Compress-Archive -Path ${filenamesString} -DestinationPath ${zipfilepath}\""
+                    def zipResult = bat(returnStdout: true, script: zipCommand)
 
-                    // Create a ZipOutputStream
-                   // def zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFilePath))
-
-
-                    // Iterate over the filenames and add each file to the zip
-                    /*filenames.each { filename ->
-                        def file = new File("${env.WORKSPACE}/${filename}")
-                        println("${env.WORKSPACE}/${filename}")
-                        if (file.exists()) {
-                            def zipEntry = new ZipEntry(file.name)
-                            zipOutputStream.putNextEntry(zipEntry)
-                            zipOutputStream.write(Files.readAllBytes(Paths.get(file.toURI())))
-                            zipOutputStream.closeEntry()
-                        } else {
-                            error "File not found: ${filename}"
-                        }
-                    }*/
-                    def zipCommand = "powershell -Command \"Compress-Archive -Path @('${env.WORKSPACE}\\' + filenames.join('\', '${env.WORKSPACE}\\')) -DestinationPath '${zipFilePath}'\""
-                    bat zipCommand
-
-                    // Check if the zip file was created successfully
-                    bat "if not exist ${zipFilePath} exit 1"
-                    
-                    // Close the ZipOutputStream
-                    //zipOutputStream.close()
-
-                    echo "Files zipped successfully."
-                } 
+                    // Check if zip file is created
+                    if (!fileExists(ZIP_NODE)) {
+                        error("Failed to create the zip file.")
+                    }
+                }
             }
         }
 
