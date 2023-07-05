@@ -60,9 +60,9 @@ pipeline {
             steps {
                 script {
                     def includedFileObject=new File("${jsonIncludefilepath}")
-                    def includedFileJSONObject=new JsonSlurper().parse(includedFileObject)
+                    def includedFileJSONObject=new JsonSlurperClassic().parse(includedFileObject)
                     def includedFilenamesString=includedFileJSONObject.filename
-                    String[] arrOfIncludedFilenames= includedFilenamesString.split(",");
+                    String[] arrOfIncludedFilenames= includedFilenamesString.trim().split(",");
                     for(int i=0;i<arrOfIncludedFilenames.length;i++)
                     {
                         includedfile +=arrOfIncludedFilenames[i]+" "
