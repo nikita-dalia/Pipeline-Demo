@@ -84,18 +84,12 @@ pipeline {
             stage('prepare-package') {
             steps {
                 script {
-                    // Read filenames from includedfile.json
+                     // Read filenames from includedfile.json
                     def includedFileContent = readFile("${jsonIncludefilepath}")
-                    def jsonSlurper = new groovy.json.JsonSlurper()
-                    def includedFiles = jsonSlurper.parseText(includedFileContent)
+                    def includedFiles = new JsonSlurper().parseText(includedFileContent)
 
                     // Create a list to store the filenames
-                    def filenames = []
-
-                    // Extract filenames from includedFiles
-                    includedFiles.each { file ->
-                        filenames.add(file.filename)
-                    }
+                    def filenames = includedFiles.collect { it.filename }
 
                     // Join filenames using space as separator
                     def filenamesString = filenames.join(' ')
