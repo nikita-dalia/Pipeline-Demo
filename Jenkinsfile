@@ -33,12 +33,8 @@ pipeline {
                     def includedFileContent = readFile(jsonIncludefilepath)
                     def includedFiles = new JsonSlurper().parseText(includedFileContent)
 
-                    // Convert ArrayList to Map manually
+                    // Extract the necessary information into a serializable data structure
                     def filenames = includedFiles.collect { it.filename }
-                    def fileMap = [:]
-                    filenames.eachWithIndex { filename, index ->
-                        fileMap[index] = filename
-                    }
 
                     def filenamesString = filenames.join(' ')
 
