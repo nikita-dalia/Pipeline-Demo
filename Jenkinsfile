@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.util.Iterator;
 import java.util.Map
 import groovy.io.FileType
-import com.sun.net.ssl.HttpsURLConnection;
 import groovy.json.JsonSlurperClassic
 
 
