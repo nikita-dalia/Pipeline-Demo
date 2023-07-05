@@ -64,7 +64,7 @@ pipeline {
                     def includedFileJSONObject=new JsonSlurper().parse(includedFileObject)
                     def includedFilenamesString=includedFileJSONObject.filename
                     String[] arrOfIncludedFilenames= includedFilenamesString.split(",");
-                    for(int i=0;i<arrOfIncludedFilenames.length,i++)
+                    for(int i=0;i<arrOfIncludedFilenames.length;i++)
                     {
                         includedfile +=arrOfIncludedFilenames[i]+" "
                     }
