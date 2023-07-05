@@ -65,7 +65,7 @@ pipeline {
                     def includedFilenamesString=includedFileJSONObject.filename
 
                   println("includedFilenamesString: " + includedFilenamesString)
-                    String[] arrOfIncludedFilenames= includedFilenamesString.trim().split(",");
+                    String[] arrOfIncludedFilenames= includedFilenamesString.split(",");
                     for(int i=0;i<arrOfIncludedFilenames.length;i++)
                     {
                         includedfile +=arrOfIncludedFilenames[i]+" "
