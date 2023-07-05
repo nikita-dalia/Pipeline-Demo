@@ -65,11 +65,18 @@ pipeline {
                     def includedFilenamesString=includedFileJSONObject.filename
 
                   println("includedFilenamesString: " + includedFilenamesString)
-                    String[] arrOfIncludedFilenames= includedFilenamesString.split(",");
-                    for(int i=0;i<arrOfIncludedFilenames.length;i++)
-                    {
-                        includedfile +=arrOfIncludedFilenames[i]+" "
-                    }
+                    if (includedFilenamesString.contains(",")) {
+                        // The string contains a comma
+                        String[] arrOfIncludedFilenames = includedFilenamesString.split(",")
+                        for (int i = 0; i < arrOfIncludedFilenames.length; i++) {
+                            includedfile += arrOfIncludedFilenames[i].trim() + " "
+                        }
+                        println("Final included files: " + includedfile)
+                        } else {
+                        // The string does not contain a comma
+                        includedfile=includedFilenamesString;
+                        println("No comma present"+includedfile)
+                        }
                     println("Final included files:"+includedfile)
                 }
             }
