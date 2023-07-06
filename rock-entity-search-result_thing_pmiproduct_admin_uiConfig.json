@@ -1,0 +1,463 @@
+{
+  "metaInfo": {
+    "dataIndex": "config",
+    "collectionName": "configObjects",
+    "responseObjectName": "response"
+  },
+  "configObjects": [
+    {
+      "id": "rock-entity-search-result_thing_pmiproduct_admin_uiConfig",
+      "name": "rock-entity-search-result_thing_pmiproduct_admin",
+      "type": "uiConfig",
+      "properties": {
+        "modifiedService": "configurationManageService",
+        "modifiedBy": "etronds.admin@riversand.com_user",
+        "modifiedDate": "2023-05-31T07:41:24.246-0500"
+      },
+      "data": {
+        "contexts": [
+          {
+            "context": {
+              "app": "_DEFAULT",
+              "channel": "_DEFAULT",
+              "component": "rock-entity-search-result",
+              "country": "_DEFAULT",
+              "domain": "thing",
+              "entityType": "pmiproduct",
+              "relationship": "_DEFAULT",
+              "role": "admin",
+              "tenant": "_DEFAULT",
+              "user": "_DEFAULT"
+            },
+            "jsonData": {
+              "config": {
+                "gridConfig": {
+                  "itemConfig": {
+                    "fields": {
+                      "thumbnail": {
+                        "visible": false
+                      },
+                      "pmiproductcategory": {
+                        "visible": true,
+                        "name": "pmiproductcategory",
+                        "header": "Product Category",
+                        "sortable": true
+                      },
+                      "vrmdmid": {
+                        "visible": false
+                      },
+                      "vrproductfeatures": {
+                        "visible": false
+                      },
+                      "productid": {
+                        "visible": false
+                      },
+                      "productdescription": {
+                        "visible": false
+                      },
+                      "color": {
+                        "visible": false
+                      },
+                      "entityTypeIcon": {
+                        "visible": false
+                      },
+                      "rpproductname": {
+                        "visible": false
+                      },
+                      "pmibrand": {
+                        "visible": true,
+                        "displaySequence": 7,
+                        "name": "pmibrand",
+                        "header": "Brand",
+                        "sortable": true
+                      },
+                      "type": {
+                        "visible": false,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 1
+                      },
+                      "pmiproductgroup": {
+                        "visible": true,
+                        "displaySequence": 5,
+                        "name": "pmiproductgroup",
+                        "header": "Product Group",
+                        "sortable": true
+                      },
+                      "listprice": {
+                        "visible": false
+                      },
+                      "size": {
+                        "visible": false
+                      },
+                      "createthedate": {
+                        "visible": false
+                      },
+                      "vrmdmname": {
+                        "visible": false
+                      },
+                      "name": {
+                        "visible": true,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 3,
+                        "linkTemplate": "entity-manage?id={id}&type={type}"
+                      },
+                      "pmiproducthierarchy": {
+                        "visible": true,
+                        "name": "pmiproducthierarchy",
+                        "header": "Product Hierarchy",
+                        "sortable": true
+                      },
+                      "rpstatus": {
+                        "visible": false
+                      },
+                      "mdmid": {
+                        "visible": false
+                      },
+                      "mdmname": {
+                        "visible": false
+                      },
+                      "typeExternalName": {
+                        "visible": true,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 1,
+                        "name": "typeExternalName",
+                        "header": "{[TypTxt]}"
+                      }
+                    }
+                  },
+                  "readOnly": false,
+                  "viewConfig": {
+                    "toolbarConfig": {
+                      "buttonItems": {
+                        "basic": {
+                          "buttons": {
+                            "save": {
+                              "visible": true
+                            },
+                            "refresh": {
+                              "visible": true
+                            },
+                            "revert": {
+                              "visible": true
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tile": {
+                      "settings": {},
+                      "visible": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rock-entity-search-result_thing_pmiproductmodel_admin_uiConfig",
+      "name": "rock-entity-search-result_thing_pmiproductmodel_admin",
+      "type": "uiConfig",
+      "properties": {
+        "modifiedService": "configurationManageService",
+        "modifiedBy": "etronds.admin@riversand.com_user",
+        "modifiedDate": "2023-05-31T07:41:24.246-0500"
+      },
+      "data": {
+        "contexts": [
+          {
+            "context": {
+              "app": "_DEFAULT",
+              "channel": "_DEFAULT",
+              "component": "rock-entity-search-result",
+              "country": "_DEFAULT",
+              "domain": "thing",
+              "entityType": "pmiproductmodel",
+              "relationship": "_DEFAULT",
+              "role": "admin",
+              "tenant": "_DEFAULT",
+              "user": "_DEFAULT"
+            },
+            "jsonData": {
+              "config": {
+                "gridConfig": {
+                  "itemConfig": {
+                    "fields": {
+                      "thumbnail": {
+                        "visible": false
+                      },
+                      "pmiproductcategory": {
+                        "visible": true,
+                        "name": "pmiproductcategory",
+                        "header": "Product Category",
+                        "sortable": true
+                      },
+                      "vrmdmid": {
+                        "visible": false
+                      },
+                      "vrproductfeatures": {
+                        "visible": false
+                      },
+                      "productid": {
+                        "visible": false
+                      },
+                      "productdescription": {
+                        "visible": false
+                      },
+                      "color": {
+                        "visible": false
+                      },
+                      "entityTypeIcon": {
+                        "visible": false
+                      },
+                      "rpproductname": {
+                        "visible": false
+                      },
+                      "pmibrand": {
+                        "visible": true,
+                        "displaySequence": 7,
+                        "name": "pmibrand",
+                        "header": "Brand",
+                        "sortable": true
+                      },
+                      "type": {
+                        "visible": false,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 1
+                      },
+                      "pmiproductgroup": {
+                        "visible": true,
+                        "displaySequence": 5,
+                        "name": "pmiproductgroup",
+                        "header": "Product Group",
+                        "sortable": true
+                      },
+                      "listprice": {
+                        "visible": false
+                      },
+                      "size": {
+                        "visible": false
+                      },
+                      "createthedate": {
+                        "visible": false
+                      },
+                      "vrmdmname": {
+                        "visible": false
+                      },
+                      "name": {
+                        "visible": true,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 3,
+                        "linkTemplate": "entity-manage?id={id}&type={type}"
+                      },
+                      "pmiproducthierarchy": {
+                        "visible": true,
+                        "name": "pmiproducthierarchy",
+                        "header": "Product Hierarchy",
+                        "sortable": true
+                      },
+                      "rpstatus": {
+                        "visible": false
+                      },
+                      "mdmid": {
+                        "visible": false
+                      },
+                      "mdmname": {
+                        "visible": false
+                      },
+                      "typeExternalName": {
+                        "visible": true,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 1,
+                        "name": "typeExternalName",
+                        "header": "{[TypTxt]}"
+                      }
+                    }
+                  },
+                  "readOnly": false,
+                  "viewConfig": {
+                    "toolbarConfig": {
+                      "buttonItems": {
+                        "basic": {
+                          "buttons": {
+                            "save": {
+                              "visible": true
+                            },
+                            "refresh": {
+                              "visible": true
+                            },
+                            "revert": {
+                              "visible": true
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tile": {
+                      "settings": {},
+                      "visible": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rock-entity-search-result_thing_pmi_admin_uiConfig",
+      "name": "rock-entity-search-result_thing_pmi_admin",
+      "type": "uiConfig",
+      "properties": {
+        "modifiedService": "configurationManageService",
+        "modifiedBy": "etronds.admin@riversand.com_user",
+        "modifiedDate": "2023-05-31T07:41:24.246-0500"
+      },
+      "data": {
+        "contexts": [
+          {
+            "context": {
+              "app": "_DEFAULT",
+              "channel": "_DEFAULT",
+              "component": "rock-entity-search-result",
+              "country": "_DEFAULT",
+              "domain": "thing",
+              "entityType": "pmiproduct",
+              "relationship": "_DEFAULT",
+              "role": "admin",
+              "tenant": "_DEFAULT",
+              "user": "_DEFAULT"
+            },
+            "jsonData": {
+              "config": {
+                "gridConfig": {
+                  "entityTypes": ["pmiproductmodel", "pmiproduct"],
+                  "itemConfig": {
+                    "fields": {
+                      "thumbnail": {
+                        "visible": false
+                      },
+                      "pmiproductcategory": {
+                        "visible": true,
+                        "name": "pmiproductcategory",
+                        "header": "Product Category",
+                        "sortable": true
+                      },
+                      "vrmdmid": {
+                        "visible": false
+                      },
+                      "vrproductfeatures": {
+                        "visible": false
+                      },
+                      "productid": {
+                        "visible": false
+                      },
+                      "productdescription": {
+                        "visible": false
+                      },
+                      "color": {
+                        "visible": false
+                      },
+                      "entityTypeIcon": {
+                        "visible": false
+                      },
+                      "rpproductname": {
+                        "visible": false
+                      },
+                      "pmibrand": {
+                        "visible": true,
+                        "displaySequence": 7,
+                        "name": "pmibrand",
+                        "header": "Brand",
+                        "sortable": true
+                      },
+                      "type": {
+                        "visible": false,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 1
+                      },
+                      "pmiproductgroup": {
+                        "visible": true,
+                        "displaySequence": 5,
+                        "name": "pmiproductgroup",
+                        "header": "Product Group",
+                        "sortable": true
+                      },
+                      "listprice": {
+                        "visible": false
+                      },
+                      "size": {
+                        "visible": false
+                      },
+                      "createthedate": {
+                        "visible": false
+                      },
+                      "vrmdmname": {
+                        "visible": false
+                      },
+                      "name": {
+                        "visible": true,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 3,
+                        "linkTemplate": "entity-manage?id={id}&type={type}"
+                      },
+                      "pmiproducthierarchy": {
+                        "visible": true,
+                        "name": "pmiproducthierarchy",
+                        "header": "Product Hierarchy",
+                        "sortable": true
+                      },
+                      "rpstatus": {
+                        "visible": false
+                      },
+                      "mdmid": {
+                        "visible": false
+                      },
+                      "mdmname": {
+                        "visible": false
+                      },
+                      "typeExternalName": {
+                        "visible": true,
+                        "isMetaDataColumn": true,
+                        "displaySequence": 1,
+                        "name": "typeExternalName",
+                        "header": "{[TypTxt]}"
+                      }
+                    }
+                  },
+                  "readOnly": false,
+                  "viewConfig": {
+                    "toolbarConfig": {
+                      "buttonItems": {
+                        "basic": {
+                          "buttons": {
+                            "save": {
+                              "visible": true
+                            },
+                            "refresh": {
+                              "visible": true
+                            },
+                            "revert": {
+                              "visible": true
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tile": {
+                      "settings": {},
+                      "visible": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

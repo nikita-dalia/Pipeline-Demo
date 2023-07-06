@@ -69,7 +69,7 @@ pipeline {
                         // The string contains a comma
                         String[] arrOfIncludedFilenames = includedFilenamesString.split(",")
                         for (int i = 0; i < arrOfIncludedFilenames.length; i++) {
-                            includedfile += arrOfIncludedFilenames[i].trim() 
+                            includedfile += arrOfIncludedFilenames[i].trim()+" "
                         }
                         println("Final included files: " + includedfile)
                         } else {
