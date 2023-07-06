@@ -63,16 +63,17 @@ pipeline {
                     def includedFileJSONObject=new JsonSlurperClassic().parse(includedFileObject)
 
                     def includedFilenamesList=includedFileJSONObject.filename
-                    def includedFilenamesString = includedFilenamesList.toString()
+                    //def includedFilenamesString = includedFilenamesList.toString()
 
-                   includedFilenamesString = includedFilenamesString.collect { it.trim().replaceAll("\\[|\\]", "") }
+                   //includedFilenamesString = includedFilenamesString.collect { it.trim().replaceAll("\\[|\\]", "") }
 
                   println("includedFilenamesString: " + includedFilenamesString)
-                    if (includedFilenamesString.contains(",")) {
+                    if (includedFilenamesString.length>1) {
                         // The string contains a comma
                         String[] arrOfIncludedFilenames = includedFilenamesString.split(",")
                         for (int i = 0; i < arrOfIncludedFilenames.length; i++) {
-                            includedfile += arrOfIncludedFilenames[i].trim()+" "
+                            arrOfIncludedFilename[i].trim().replaceAll("\\[|\\]", "")
+                            includedfile += arrOfIncludedFilenames[i]+" "
                         }
                         println("Final included files: " + includedfile)
                         } else {
