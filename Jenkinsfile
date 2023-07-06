@@ -71,8 +71,11 @@ pipeline {
                     if (includedFilenamesString.size()>1) {
                         // The string contains a comma
                         for (int i = 0; i < includedFilenamesString.size(); i++) {
+                            if(i>1){
+                                includedfile+=","
+                            }
                             includedFilenamesString[i].trim().replaceAll("\\[|\\]", "")
-                            includedfile += "'${env.WORKSPACE}"+"\\"+includedFilenamesString[i]+"',"
+                            includedfile += "'${env.WORKSPACE}"+"\\"+includedFilenamesString[i]
                         }
                         println("Final included files: " + includedfile)
                         } else {
