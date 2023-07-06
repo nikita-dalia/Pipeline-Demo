@@ -85,6 +85,7 @@ pipeline {
                     println("Filenames processed successfully... Moving to zipping..")
 
                      bat """
+                        powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
                         powershell.exe -Command "Compress-Archive -Path '${includedfile}' -DestinationPath '${zipfilepath}'"
                         """
                     if (!fileExists(zipfilepath)) {
