@@ -97,10 +97,56 @@ pipeline {
                     if (!fileExists(zipfilepath)) {
                         error("Failed to create the zip file.")
                     }
+                    else{
+                        println("Files zipped successfully...")
+                    }
                     
                 }
             }
         }
+            stage('creating folder'){
+            steps{
+                script{
+                    
+                    def jsonobject = "{\"binaryStreamObject\":{\"id\":\"guid\",\"type\":\"seedDataStream\",\"properties\":{\"objectKey\":\"${ZIP_NODE}\",\"originalFileName\":\"${ZIP_NODE}\"}}}"
+
+            def post = new URL("https://etronds.riversand.com/api/binarystreamobjectservice/prepareUpload").openConnection();
+            def message = '{"message":"this is a message"}'
+            post.setRequestMethod("POST")
+            post.setDoOutput(true)
+            post.setRequestProperty("Content-Type","application/json")
+            post.setRequestProperty("x-rdp-version","8.1")
+            post.setRequestProperty("x-rdp-tenantId","etronds")
+            post.setRequestProperty("x-rdp-clientId","rdpclient")
+            post.setRequestProperty("x-rdp-userId","etronds.systemadmin@riversand.com")
+            post.setRequestProperty("x-rdp-userRoles","systemadmin")
+            post.setRequestProperty("auth-client-id","j29DTHa7m7VHucWbHg7VvYA75pUjBopS")
+            post.setRequestProperty("auth-client-secret","J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB")
+            post.connect();
+
+                    OutputStreamWriter out = new OutputStreamWriter(post.getOutputStream());
+                    out.write(jsonobject);
+                    out.close();
+                    def statuscode1 = post.getResponseCode();
+                    String outputObj = post.getInputStream().getText();
+                    println("StatusCode="+statuscode1)
+                    println("outputObj="+outputObj)
+                    Map jsonContent = (Map) new JsonSlurper().parseText(outputObj)
+                    String data1 = jsonContent.response.binaryStreamObjects.data
+                    String[] arrOfStr = data1.split(","); 
+                    // println("Number of substrings: "+arrOfStr.length);
+                         for(int i=0; i< arrOfStr.length; i++)
+                           {
+                              String[] arrOfurl = arrOfStr[i].split("uploadURL=")
+                              for(int p=1; p< arrOfurl.length; p++){
+                              fileuploadUrl = arrOfurl[p]-'}}]'
+                               println("data["+p+"] : "+arrOfurl[p])
+                          }
+                         }
+                       println(fileuploadUrl)
+          }
+        }
+    }
 
     }
 }
