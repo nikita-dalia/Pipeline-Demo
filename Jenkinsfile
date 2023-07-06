@@ -75,7 +75,7 @@ pipeline {
                                 includedfile+=","
                             }
                             includedFilenamesString[i].trim().replaceAll("\\[|\\]", "")
-                            includedfile += "'${env.WORKSPACE}"+"\\"+includedFilenamesString[i]
+                            includedfile += "'${env.WORKSPACE}"+"\\"+includedFilenamesString[i]+"'"
                         }
                         println("Final included files: " + includedfile)
                         } else {
