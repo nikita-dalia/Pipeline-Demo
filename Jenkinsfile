@@ -82,12 +82,9 @@ pipeline {
                     println("Final included files: " + includedfile)
                     println("Filenames processed successfully... Moving to zipping..")
 
-                    def filesToZip = includedfile.split()
-                    def fileArgs = filesToZip.collect { "'${it}'" }.join(', ')
-
                     bat """
                     powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
-                    powershell.exe -Command "Compress-Archive -Path @(${fileArgs}) -DestinationPath '${zipfilepath}'"
+                    powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${zipfilepath}'"
                     """
 
                     if (!fileExists(zipfilepath)) {
