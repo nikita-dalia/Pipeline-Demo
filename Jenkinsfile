@@ -84,7 +84,9 @@ pipeline {
 
                     println("Filenames processed successfully... Moving to zipping..")
 
-                     bat "powershell.exe -Command \"Compress-Archive -Path ${includedfile} -DestinationPath ${zipfilepath}\""
+                     bat """
+                        powershell.exe -Command "Compress-Archive -Path '${includedfile}' -DestinationPath '${zipfilepath}'"
+                        """
                     if (!fileExists(zipfilepath)) {
                         error("Failed to create the zip file.")
                     }
