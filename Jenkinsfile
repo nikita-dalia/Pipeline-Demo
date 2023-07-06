@@ -85,7 +85,7 @@ pipeline {
                     println("Filenames processed successfully... Moving to zipping..")
 
                      def filesToZip = includedfile.split()
-                        def fileArgs = filesToZip.collect { "'${it}'" }.join(', ')
+                        def fileArgs = filesToZip.collect { "'${it}'" }.join(' ')
                         
                         bat """
                         powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
