@@ -56,7 +56,7 @@ pipeline {
                 }
             }
         }
-        /*stage('prepare-package') {
+        stage('prepare-package') {
             steps {
                 script {
                     def includedFileObject=new File("${jsonIncludefilepath}")
@@ -84,9 +84,12 @@ pipeline {
 
                     println("Filenames processed successfully... Moving to zipping..")
 
-                     bat """
+                     def filesToZip = includedfile.split()
+                        def fileArgs = filesToZip.collect { "'${it}'" }.join(' ')
+                        
+                        bat """
                         powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
-                        powershell.exe -Command "Compress-Archive -Path '${includedfile}' -DestinationPath '${zipfilepath}'"
+                        powershell.exe -Command "Compress-Archive -Path @(${fileArgs}) -DestinationPath '${zipfilepath}'"
                         """
                     if (!fileExists(zipfilepath)) {
                         error("Failed to create the zip file.")
@@ -94,41 +97,6 @@ pipeline {
                     
                 }
             }
-        }*/
-        stage('prepare-package') {
-            steps {
-                script {
-                    def includedFileObject = new File("${jsonIncludefilepath}")
-                    def includedFileJSONObject = new JsonSlurperClassic().parse(includedFileObject)
-
-                    def includedFilenamesString = includedFileJSONObject.filename
-                    includedFilenamesString = includedFilenamesString.trim().replaceAll("\\[|\\]", "")
-
-                    println("includedFilenamesString: " + includedFilenamesString)
-
-                    if (includedFilenamesString.contains(",")) {
-                        // The string contains a comma
-                        includedfile = includedFilenamesString.split(",").collect { "${env.WORKSPACE}\\${it.trim()}" }.join(' ')
-                        println("Final included files: " + includedfile)
-                    } else {
-                        // The string does not contain a comma
-                        includedfile = "${env.WORKSPACE}\\${includedFilenamesString}"
-                        println("No comma present: " + includedfile)
-                    }
-
-                    println("Filenames processed successfully... Moving to zipping..")
-
-                    bat """
-                    powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
-                    powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${zipfilepath}'"
-                    """
-
-                    if (!fileExists(zipfilepath)) {
-                        error("Failed to create the zip file.")
-                    }
-                }
-            }
         }
-
     }
 }
