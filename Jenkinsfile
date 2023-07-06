@@ -71,7 +71,7 @@ pipeline {
                     if (includedFilenamesString.size()>1) {
                         // The string contains a comma
                         for (int i = 0; i < includedFilenamesString.size(); i++) {
-                            if(i>1){
+                            if(i>=1){
                                 includedfile+=","
                             }
                             includedFilenamesString[i].trim().replaceAll("\\[|\\]", "")
