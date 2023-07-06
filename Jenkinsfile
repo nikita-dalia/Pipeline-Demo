@@ -140,7 +140,7 @@ pipeline {
             }
         }
 
-        stage('Deploying folder') {
+        /*stage('Deploying folder') {
             steps {
                 script {
                     echo "====Deploying folder====="
@@ -158,11 +158,41 @@ pipeline {
                         --header "x-ms-meta-binarystreamobjectid: guid" ^
                         --header "x-ms-blob-type: BlockBlob" ^
                         --header "Content-Type: application/zip" ^
-                        --data-binary "${fileuploadUrl}"
+                        --data-binary "${zipfilepath}"
                     """
                 }
             }
+        }*/
+        stage('Deploying folder') {
+            steps {
+                script {
+                    echo "====Deploying folder====="
+
+                    def curlCommand = ['curl', '-v', '-X', 'PUT', fileuploadUrl,
+                                    '--header', "x-ms-meta-x_rdp_userroles: systemadmin",
+                                    '--header', "x-ms-meta-x_rdp_tenantid: etronds",
+                                    '--header', "x-ms-meta-originalfilename: ${ZIP_NODE}",
+                                    '--header', "x-ms-blob-content-disposition: attachment; filename=${ZIP_NODE}",
+                                    '--header', "x-ms-meta-type: disposition",
+                                    '--header', "x-ms-meta-x_rdp_clientid: rdpclient",
+                                    '--header', "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com",
+                                    '--header', "x-ms-meta-binarystreamobjectid: guid",
+                                    '--header', "x-ms-blob-type: BlockBlob",
+                                    '--header', 'Content-Type: application/zip',
+                                    '--data-binary', "@${zipfilepath}"]
+
+                    def processBuilder = new ProcessBuilder(curlCommand)
+                    processBuilder.redirectErrorStream(true)
+
+                    def process = processBuilder.start()
+                    process.waitFor()
+
+                    def output = process.inputStream.text
+                    println(output)
+                }
+            }
         }
+
 
     }
 }
