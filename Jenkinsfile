@@ -68,7 +68,7 @@ pipeline {
                    //includedFilenamesString = includedFilenamesString.collect { it.trim().replaceAll("\\[|\\]", "") }
 
                   println("includedFilenamesString: " + includedFilenamesString)
-                    if (includedFilenamesString.length>1) {
+                    if (includedFilenamesString.size()>1) {
                         // The string contains a comma
                         String[] arrOfIncludedFilenames = includedFilenamesString.split(",")
                         for (int i = 0; i < arrOfIncludedFilenames.length; i++) {
