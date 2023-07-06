@@ -144,7 +144,8 @@ pipeline {
             steps {
                 script {
                     echo "====Deploying folder====="
-                    def encodedZipFilePath = zipfilepath.replace("\\", "\\\\").replace("'", "''")
+                    def encodedZipFilePath = URLEncoder.encode(zipfilepath, "UTF-8").replace("+", "%20")
+                    def encodedFileUploadUrl = URLEncoder.encode(fileuploadUrl, "UTF-8").replace("+", "%20")                    
                     bat """
                     curl -v -X PUT "${fileuploadUrl}" ^
                         --header "x-ms-meta-x_rdp_userroles: systemadmin" ^
@@ -157,7 +158,7 @@ pipeline {
                         --header "x-ms-meta-binarystreamobjectid: guid" ^
                         --header "x-ms-blob-type: BlockBlob" ^
                         --header "Content-Type: application/zip" ^
-                        --data-binary "@\"${encodedZipFilePath}\""
+                        --data-binary "@${encodedZipFilePath}"
                     """
                 }
             }
