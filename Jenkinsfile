@@ -62,9 +62,11 @@ pipeline {
                     def includedFileObject=new File("${jsonIncludefilepath}")
                     def includedFileJSONObject=new JsonSlurperClassic().parse(includedFileObject)
 
-                    def includedFilenamesString=includedFileJSONObject.filename
+                    def includedFilenamesList=includedFileJSONObject.filename
                     def includedFilenamesString = includedFilenamesList.toString()
+
                    includedFilenamesString = includedFilenamesString.collect { it.trim().replaceAll("\\[|\\]", "") }
+
                   println("includedFilenamesString: " + includedFilenamesString)
                     if (includedFilenamesString.contains(",")) {
                         // The string contains a comma
