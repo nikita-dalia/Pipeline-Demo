@@ -147,7 +147,7 @@ pipeline {
                     def encodedZipFilePath = URLEncoder.encode(zipfilepath, "UTF-8").replace("+", "%20")
                     def encodedFileUploadUrl = URLEncoder.encode(fileuploadUrl, "UTF-8").replace("+", "%20")                    
                     bat """
-                    curl -v -X PUT "${fileuploadUrl}" ^
+                    curl -v -X PUT "${encodedFileUploadUrl}" ^
                         --header "x-ms-meta-x_rdp_userroles: systemadmin" ^
                         --header "x-ms-meta-x_rdp_tenantid: rdpclient" ^
                         --header "x-ms-meta-originalfilename: ${ZIP_NODE}" ^
