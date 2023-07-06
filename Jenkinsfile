@@ -62,7 +62,7 @@ pipeline {
                     def includedFileObject=new File("${jsonIncludefilepath}")
                     def includedFileJSONObject=new JsonSlurperClassic().parse(includedFileObject)
 
-                    def includedFilenamesList=includedFileJSONObject.filename
+                    def includedFilenamesString=includedFileJSONObject.filename
                     //def includedFilenamesString = includedFilenamesList.toString()
 
                    //includedFilenamesString = includedFilenamesString.collect { it.trim().replaceAll("\\[|\\]", "") }
