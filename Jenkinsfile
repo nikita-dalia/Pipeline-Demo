@@ -56,7 +56,7 @@ pipeline {
                 }
             }
         }
-        stage('prepare-package') {
+        /*stage('prepare-package') {
             steps {
                 script {
                     def includedFileObject=new File("${jsonIncludefilepath}")
@@ -97,6 +97,46 @@ pipeline {
                     
                 }
             }
+        }*/
+        stage('prepare-package') {
+    steps {
+        script {
+            def includedFileObject = new File("${jsonIncludefilepath}")
+            def includedFileJSONObject = new JsonSlurperClassic().parse(includedFileObject)
+
+            def includedFilenamesString = includedFileJSONObject.filename
+
+            println("includedFilenamesString: " + includedFilenamesString)
+
+            if (includedFilenamesString.size() > 1) {
+                // The string contains multiple file names
+                def filesToZip = includedFilenamesString.split(',')
+                def fileArgs = filesToZip.collect { "'${env.WORKSPACE}/${it.trim()}'" }.join(', ')
+
+                println("Final included files: " + filesToZip)
+
+                bat """
+                powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
+                powershell.exe -Command "Compress-Archive -Path @(${fileArgs}) -DestinationPath '${zipfilepath}'"
+                """
+            } else {
+                // The string contains a single file name
+                def filePath = "${env.WORKSPACE}/${includedFilenamesString.trim()}"
+
+                println("Single file included: " + filePath)
+
+                bat """
+                powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
+                powershell.exe -Command "Compress-Archive -Path '${filePath}' -DestinationPath '${zipfilepath}'"
+                """
+            }
+
+            if (!fileExists(zipfilepath)) {
+                error("Failed to create the zip file.")
+            }
         }
+    }
+}
+
     }
 }
