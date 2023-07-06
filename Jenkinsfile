@@ -70,7 +70,7 @@ pipeline {
                   println("includedFilenamesString: " + includedFilenamesString)
                     if (includedFilenamesString.size()>1) {
                         // The string contains a comma
-                        for (int i = 0; i < includedFilenamesString.length; i++) {
+                        for (int i = 0; i < includedFilenamesString.size(); i++) {
                             includedFilenamesString[i].trim().replaceAll("\\[|\\]", "")
                             includedfile += includedFilenamesString[i]+" "
                         }
