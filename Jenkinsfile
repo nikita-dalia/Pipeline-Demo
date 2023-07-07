@@ -188,5 +188,146 @@ pipeline {
             }
         }
 
+        stage('Deployment into tenant'){
+                steps{
+                    script{
+                        echo "====Deployment====="
+                        def jsonobject = "{\"adminObject\":{\"id\":\"someguid\",\"type\":\"adminObject\",\"properties\":{\"flushConfig\":false,\"storageType\":\"stream\",\"objectKey\":\"${ZIP_NODE}\",\"tenantId\":\"etronds\",\"retryCount\":1,\"sleepTime\":1000}}}"
+                        def post = new URL("https://etronds.riversand.com/api/adminservice/deploytenantseed").openConnection();
+                        def message = '{"message":"this is a message"}'
+                        post.setRequestMethod("POST")
+                        post.setDoOutput(true)
+                        post.setRequestProperty("Content-Type","application/zip")
+                        post.setRequestProperty("x-rdp-version","8.1")
+                        
+                        post.setRequestProperty("x-rdp-clientId","rdpclient")
+                        
+                        post.setRequestProperty("x-rdp-userId","etronds.systemadmin@riversand.com")
+                        
+                        post.setRequestProperty("x-rdp-userRoles","systemadmin")
+                        
+                        post.setRequestProperty("auth-client-id","j29DTHa7m7VHucWbHg7VvYA75pUjBopS")
+                        
+                        post.setRequestProperty("auth-client-secret","J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB")
+                        OutputStreamWriter out = new OutputStreamWriter(post.getOutputStream());
+                        out.write(jsonobject);
+                        out.close();
+                        post.getOutputStream().write(message.getBytes("UTF-8"));
+                        def statuscode2 = post.getResponseCode();
+                        def outputObj = post.getInputStream().getText();
+                        println("statusCode=" +statuscode2)
+                        Map jsonContent = (Map) new JsonSlurper().parseText(outputObj)
+                        println(jsonContent)
+                        def status = jsonContent.response.status
+                        def totalRecords= jsonContent.response.totalRecords
+                        taskID = jsonContent.response.statusDetail.taskId
+                        println("Status="+status);
+                        println("Taskid="+taskID)
+                        println("TotalRecod="+totalRecords);
+
+                    }    
+            }
+        }
+
+        /*stage('Task_Verify') {
+            steps {
+                script {
+                    parallel(
+                        task_messages: {
+                            def responsess = bat(returnStdout: true, script: """
+                                curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
+                                --header "Content-Type: application/zip" ^
+                                --header "x-rdp-version: 8.1" ^
+                                --header "x-rdp-clientId: rdpclient" ^
+                                --header "x-rdp-userId: etronds.systemadmin@riversand.com" ^
+                                --header "x-rdp-userRoles: systemadmin" ^
+                                --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
+                                --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
+                                --data "{
+                                    \\"params\\": {
+                                        \\"query\\": {
+                                            \\"id\\": \\"${taskID}\\",
+                                            \\"filters\\": {
+                                                \\"typesCriterion\\": [
+                                                    \\"tasksummaryobject\\"
+                                                ]
+                                            }
+                                        },
+                                        \\"fields\\": {
+                                            \\"attributes\\": [
+                                                \\"_ALL\\"
+                                            ],
+                                            \\"relationships\\": [
+                                                \\"_ALL\\"
+                                            ]
+                                        },
+                                        \\"options\\": {
+                                            \\"maxRecords\\": 1000
+                                        }
+                                    }
+                                }"
+                            """)
+
+                            def jsonContent = readJSON text: responsess
+                            def totalRecord = jsonContent.response.totalRecords
+
+                            if (totalRecord == 1) {
+                                def objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                                println("=========== objecttttt=found====" + objectstatus)
+                            } else {
+                                def statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                                println("===========no objecttttt=====" + statusDetail1msg)
+                            }
+
+                        },
+                        task_status: {
+                            def responsess = sh returnStdout: true, script: """
+                                curl --location --request POST '${params.TENANT_URL}/api/requesttrackingservice/get' \
+                                --header 'Content-Type: ${env.ContentType}' \
+                                --header 'x-rdp-version: ${env.xrdpversion}' \
+                                --header 'x-rdp-clientId: ${params.XRDP_CLIENT_ID}' \
+                                --header 'x-rdp-userId: ${params.USER_ID}' \
+                                --header 'x-rdp-userRoles: ${env.xrdpuserRoles}' \
+                                --header 'auth-client-id: ${params.AUTH_CLIENT_ID}' \
+                                --header 'auth-client-secret: ${params.AUTH_CLIENT_SERCET}' \
+                                --data '{
+                                    "params": {
+                                        "query": {
+                                            "id": "${taskID}",
+                                            "filters": {
+                                                "typesCriterion": [
+                                                    "tasksummaryobject"
+                                                ]
+                                            }
+                                        },
+                                        "fields": {
+                                            "attributes": [
+                                                "_ALL"
+                                            ],
+                                            "relationships": [
+                                                "_ALL"
+                                            ]
+                                        },
+                                        "options": {
+                                            "maxRecords": 1000
+                                        }
+                                    }
+                                }'
+                            """
+                            Map jsonContent = (Map) new JsonSlurper().parseText(responsess)
+                            def totalRecord = jsonContent.response.totalRecords;
+                            
+                            if (totalRecord == 1) {
+                                objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                            } else {
+                                statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                            }
+                        }
+                    )
+                }
+            }
+        }*/
+
+
     }
 }
