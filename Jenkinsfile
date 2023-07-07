@@ -243,29 +243,7 @@ pipeline {
                                 --header "x-rdp-userRoles: systemadmin" ^
                                 --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
                                 --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
-                                --data '{
-                                    "params": {
-                                        "query": {
-                                            "id": "${taskID}",
-                                            "filters": {
-                                                "typesCriterion": [
-                                                    "tasksummaryobject"
-                                                ]
-                                            }
-                                        },
-                                        "fields": {
-                                            "attributes": [
-                                                "_ALL"
-                                            ],
-                                            "relationships": [
-                                                "_ALL"
-                                            ]
-                                        },
-                                        "options": {
-                                            "maxRecords": 1000
-                                        }
-                                    }
-                                }'
+                                --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
                             """)
 
                             def jsonContent = readJSON text: responsess
@@ -289,29 +267,7 @@ pipeline {
                                 --header "x-rdp-userRoles: systemadmin" ^
                                 --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
                                 --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
-                                --data '{
-                                    "params": {
-                                        "query": {
-                                            "id": "${taskID}",
-                                            "filters": {
-                                                "typesCriterion": [
-                                                    "tasksummaryobject"
-                                                ]
-                                            }
-                                        },
-                                        "fields": {
-                                            "attributes": [
-                                                "_ALL"
-                                            ],
-                                            "relationships": [
-                                                "_ALL"
-                                            ]
-                                        },
-                                        "options": {
-                                            "maxRecords": 1000
-                                        }
-                                    }
-                                }'
+                                --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
                             """)
 
                             def jsonContent = readJSON text: responsess
