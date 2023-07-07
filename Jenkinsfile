@@ -255,8 +255,8 @@ pipeline {
                                 println("=========== objecttttt=found====" + objectstatus)
                             } else {
                                 statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
-                                println("===========no objecttttt=====" + statusDetail1msg)*/
-                            }
+                                println("===========no objecttttt=====" + statusDetail1msg)
+                            }*/
                         },
                         task_status: {
                             def responsess = bat(returnStdout: true, script: """
