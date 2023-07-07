@@ -167,7 +167,6 @@ pipeline {
             steps {
                 script {
                     echo "====Deploying folder====="
-
                     def curlCommand = ['curl', '-v', '-X', 'PUT', fileuploadUrl,
                                     '--header', "x-ms-meta-x_rdp_userroles: systemadmin",
                                     '--header', "x-ms-meta-x_rdp_tenantid: etronds",
@@ -181,7 +180,8 @@ pipeline {
                                     '--header', 'Content-Type: application/zip',
                                     '--data-binary', "@${zipfilepath}"]
 
-                    def processBuilder = new ProcessBuilder(curlCommand)
+                    def processBuilder = new ProcessBuilder()
+                    processBuilder.command(curlCommand.toArray(new String[curlCommand.size()] as String[]))
                     processBuilder.redirectErrorStream(true)
 
                     def process = processBuilder.start()
