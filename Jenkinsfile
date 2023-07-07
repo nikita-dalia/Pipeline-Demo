@@ -272,10 +272,10 @@ pipeline {
                             def totalRecord = jsonContent.response.totalRecords
 
                             if (totalRecord == 1) {
-                                def objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                                objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
                                 println("=========== objecttttt=found====" + objectstatus)
                             } else {
-                                def statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                                statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
                                 println("===========no objecttttt=====" + statusDetail1msg)
                             }
 
@@ -319,9 +319,9 @@ pipeline {
                             def totalRecord = jsonContent.response.totalRecords
 
                             if (totalRecord == 1) {
-                                def objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                                objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
                             } else {
-                                def statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                                statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
                             }
                         }
                     )
