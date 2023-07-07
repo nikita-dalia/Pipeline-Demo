@@ -108,7 +108,7 @@ pipeline {
                     post.setRequestProperty("Content-Type", "application/json")
                     post.setRequestProperty("x-rdp-version", "8.1")
                     post.setRequestProperty("x-rdp-tenantId", "etronds")
-                    post.setRequestProperty("x-rdp-clientId", "etronds")
+                    post.setRequestProperty("x-rdp-clientId", "rdpclient")
                     post.setRequestProperty("x-rdp-userId", "etronds.systemadmin@riversand.com")
                     post.setRequestProperty("x-rdp-userRoles", "systemadmin")
                     post.setRequestProperty("auth-client-id", "j29DTHa7m7VHucWbHg7VvYA75pUjBopS")
