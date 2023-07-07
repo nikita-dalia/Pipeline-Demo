@@ -166,33 +166,27 @@ pipeline {
         stage('Deploying folder') {
             steps {
                 script {
-                    echo "====Deploying folder====="
-                    def curlCommand = ['curl', '-v', '-X', 'PUT', fileuploadUrl,
-                                    '--header', "x-ms-meta-x_rdp_userroles: systemadmin",
-                                    '--header', "x-ms-meta-x_rdp_tenantid: etronds",
-                                    '--header', "x-ms-meta-originalfilename: ${ZIP_NODE}",
-                                    '--header', "x-ms-blob-content-disposition: attachment; filename=${ZIP_NODE}",
-                                    '--header', "x-ms-meta-type: disposition",
-                                    '--header', "x-ms-meta-x_rdp_clientid: rdpclient",
-                                    '--header', "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com",
-                                    '--header', "x-ms-meta-binarystreamobjectid: guid",
-                                    '--header', "x-ms-blob-type: BlockBlob",
-                                    '--header', 'Content-Type: application/zip',
-                                    '--data-binary', "@${zipfilepath}"]
+                    echo "==== Deploying folder ===="
 
-                    def processBuilder = new ProcessBuilder()
-                    processBuilder.command(curlCommand.toArray(new String[curlCommand.size()] as String[]))
-                    processBuilder.redirectErrorStream(true)
+                    def encodedFileuploadUrl = fileuploadUrl.replaceAll('%', '%%')
 
-                    def process = processBuilder.start()
-                    process.waitFor()
-
-                    def output = process.inputStream.text
-                    println(output)
+                    bat """
+                        curl -v -X PUT "${encodedFileuploadUrl}" ^
+                        --header "x-ms-meta-x_rdp_userroles: systemadmin" ^
+                        --header "x-ms-meta-x_rdp_tenantid: etronds" ^
+                        --header "x-ms-meta-originalfilename: ${ZIP_NODE}" ^
+                        --header "x-ms-blob-content-disposition: attachment; filename=${ZIP_NODE}" ^
+                        --header "x-ms-meta-type: disposition" ^
+                        --header "x-ms-meta-x_rdp_clientid: rdpclient" ^
+                        --header "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com" ^
+                        --header "x-ms-meta-binarystreamobjectid: guid" ^
+                        --header "x-ms-blob-type: BlockBlob" ^
+                        --header "Content-Type: application/zip" ^
+                        --data-binary "@${zipfilepath}"
+                    """
                 }
             }
         }
-
 
     }
 }
