@@ -244,25 +244,25 @@ pipeline {
                                 --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
                                 --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
                                 --data "{
-                                    \\"params\\": {
-                                        \\"query\\": {
-                                            \\"id\\": \\"${taskID}\\",
-                                            \\"filters\\": {
-                                                \\"typesCriterion\\": [
-                                                    \\"tasksummaryobject\\"
+                                    \"params\": {
+                                        \"query\": {
+                                            \"id\": \"${taskID}\",
+                                            \"filters\": {
+                                                \"typesCriterion\": [
+                                                    \"tasksummaryobject\"
                                                 ]
                                             }
                                         },
-                                        \\"fields\\": {
-                                            \\"attributes\\": [
-                                                \\"_ALL\\"
+                                        \"fields\": {
+                                            \"attributes\": [
+                                                \"_ALL\"
                                             ],
-                                            \\"relationships\\": [
-                                                \\"_ALL\\"
+                                            \"relationships\": [
+                                                \"_ALL\"
                                             ]
                                         },
-                                        \\"options\\": {
-                                            \\"maxRecords\\": 1000
+                                        \"options\": {
+                                            \"maxRecords\": 1000
                                         }
                                     }
                                 }"
@@ -291,25 +291,25 @@ pipeline {
                                 --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
                                 --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
                                 --data "{
-                                    \\"params\\": {
-                                        \\"query\\": {
-                                            \\"id\\": \\"${taskID}\\",
-                                            \\"filters\\": {
-                                                \\"typesCriterion\\": [
-                                                    \\"tasksummaryobject\\"
+                                    \"params\": {
+                                        \"query\": {
+                                            \"id\": \"${taskID}\",
+                                            \"filters\": {
+                                                \"typesCriterion\": [
+                                                    \"tasksummaryobject\"
                                                 ]
                                             }
                                         },
-                                        \\"fields\\": {
-                                            \\"attributes\\": [
-                                                \\"_ALL\\"
+                                        \"fields\": {
+                                            \"attributes\": [
+                                                \"_ALL\"
                                             ],
-                                            \\"relationships\\": [
-                                                \\"_ALL\\"
+                                            \"relationships\": [
+                                                \"_ALL\"
                                             ]
                                         },
-                                        \\"options\\": {
-                                            \\"maxRecords\\": 1000
+                                        \"options\": {
+                                            \"maxRecords\": 1000
                                         }
                                     }
                                 }"
