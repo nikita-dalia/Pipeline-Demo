@@ -245,7 +245,7 @@ pipeline {
                                 --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
                                 --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
                             """)
-                            println(responsess)
+                            println("response: "+responsess)
                             def jsonSlurper = new JsonSlurper()
                             def jsonContent = jsonSlurper.parseText(responsess.trim())
                             def totalRecord = jsonContent.response.totalRecords
