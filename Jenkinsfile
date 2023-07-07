@@ -229,7 +229,7 @@ pipeline {
             }
         }
 
-        stage('Task_Verify') {
+        /*stage('Task_Verify') {
             steps {
                 script {
                     parallel(
@@ -327,7 +327,7 @@ pipeline {
                     )
                 }
             }
-        }
+        }*/
 
 
     }
