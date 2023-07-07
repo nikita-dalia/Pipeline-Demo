@@ -229,62 +229,62 @@ pipeline {
             }
         }
 
-stage('Task_Verify') {
-    steps {
-        script {
-            parallel(
-                task_messages: {
-                    def responsess = bat(returnStdout: true, script: """
-                        curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
-                        --header "Content-Type: application/zip" ^
-                        --header "x-rdp-version: 8.1" ^
-                        --header "x-rdp-clientId: rdpclient" ^
-                        --header "x-rdp-userId: etronds.systemadmin@riversand.com" ^
-                        --header "x-rdp-userRoles: systemadmin" ^
-                        --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
-                        --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
-                        --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
-                    """)
+        stage('Task_Verify') {
+            steps {
+                script {
+                    parallel(
+                        task_messages: {
+                            def responsess = bat(returnStdout: true, script: """
+                                curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
+                                --header "Content-Type: application/zip" ^
+                                --header "x-rdp-version: 8.1" ^
+                                --header "x-rdp-clientId: rdpclient" ^
+                                --header "x-rdp-userId: etronds.systemadmin@riversand.com" ^
+                                --header "x-rdp-userRoles: systemadmin" ^
+                                --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
+                                --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
+                                --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
+                            """)
 
-                    def jsonContent = readJSON text: responsess.trim()
-                    def totalRecord = jsonContent.response.totalRecords
+                            def jsonSlurper = new JsonSlurper()
+                            def jsonContent = jsonSlurper.parseText(responsess.trim())
+                            def totalRecord = jsonContent.response.totalRecords
 
-                    if (totalRecord == 1) {
-                        objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
-                        println("=========== objecttttt=found====" + objectstatus)
-                    } else {
-                        statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
-                        println("===========no objecttttt=====" + statusDetail1msg)
-                    }
-                },
-                task_status: {
-                    def responsess = bat(returnStdout: true, script: """
-                        curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
-                        --header "Content-Type: application/zip" ^
-                        --header "x-rdp-version: 8.1" ^
-                        --header "x-rdp-clientId: rdpclient" ^
-                        --header "x-rdp-userId: etronds.systemadmin@riversand.com" ^
-                        --header "x-rdp-userRoles: systemadmin" ^
-                        --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
-                        --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
-                        --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
-                    """)
+                            if (totalRecord == 1) {
+                                objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                                println("=========== objecttttt=found====" + objectstatus)
+                            } else {
+                                statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                                println("===========no objecttttt=====" + statusDetail1msg)
+                            }
+                        },
+                        task_status: {
+                            def responsess = bat(returnStdout: true, script: """
+                                curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
+                                --header "Content-Type: application/zip" ^
+                                --header "x-rdp-version: 8.1" ^
+                                --header "x-rdp-clientId: rdpclient" ^
+                                --header "x-rdp-userId: etronds.systemadmin@riversand.com" ^
+                                --header "x-rdp-userRoles: systemadmin" ^
+                                --header "auth-client-id: j29DTHa7m7VHucWbHg7VvYA75pUjBopS" ^
+                                --header "auth-client-secret: J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB" ^
+                                --data '{"params":{"query":{"id":"${taskID}","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
+                            """)
 
-                    def jsonContent = readJSON text: responsess.trim()
-                    def totalRecord = jsonContent.response.totalRecords
+                            def jsonSlurper = new JsonSlurper()
+                            def jsonContent = jsonSlurper.parseText(responsess.trim())
+                            def totalRecord = jsonContent.response.totalRecords
 
-                    if (totalRecord == 1) {
-                        objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
-                    } else {
-                        statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
-                    }
+                            if (totalRecord == 1) {
+                                objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                            } else {
+                                statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                            }
+                        }
+                    )
                 }
-            )
+            }
         }
-    }
-}
-
-
 
 
     }
