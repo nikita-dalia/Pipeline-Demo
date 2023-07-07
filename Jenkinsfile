@@ -235,7 +235,7 @@ pipeline {
                     parallel(
                         task_messages: {
                             def responsess = bat(returnStdout: true, script: """
-                                curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
+                                curl --location --request POST "${params.TENANT_URL}/api/requesttrackingservice/get" ^
                                 --header "Content-Type: application/zip" ^
                                 --header "x-rdp-version: 8.1" ^
                                 --header "x-rdp-clientId: rdpclient" ^
@@ -278,11 +278,10 @@ pipeline {
                                 statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
                                 println("===========no objecttttt=====" + statusDetail1msg)
                             }
-
                         },
                         task_status: {
                             def responsess = bat(returnStdout: true, script: """
-                                curl --location --request POST "https://etronds.riversand.com/api/requesttrackingservice/get" ^
+                                curl --location --request POST "${params.TENANT_URL}/api/requesttrackingservice/get" ^
                                 --header "Content-Type: application/zip" ^
                                 --header "x-rdp-version: 8.1" ^
                                 --header "x-rdp-clientId: rdpclient" ^
@@ -328,6 +327,7 @@ pipeline {
                 }
             }
         }
+
 
 
     }
