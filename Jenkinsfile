@@ -35,7 +35,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Initialization...') {
+        stage('Path Variables Initialization') {
             steps {
                 script {
                     NAME_ZIPFILE = "${env.BRANCH_NAME}.zip"
@@ -53,7 +53,7 @@ pipeline {
             }
         }
 
-        stage('prepare-package') {
+        stage('Zipping Files') {
             steps {
                 script {
                     def includedFileObject = new File("${path_filestobedeployed}")
@@ -96,7 +96,7 @@ pipeline {
             }
         }
         
-        stage('creating folder') {
+        stage('Prepare Upload') {
             steps {
                 script {
                     def jsonobject = "{\"binaryStreamObject\":{\"id\":\"guid\",\"type\":\"seedDataStream\",\"properties\":{\"objectKey\":\"${NAME_ZIPFILE}\",\"originalFileName\":\"${NAME_ZIPFILE}\"}}}"
@@ -163,7 +163,7 @@ pipeline {
                 }
             }
         }*/
-        stage('Deploying folder') {
+        stage('Deploy Files') {
             steps {
                 script {
                     echo "==== Deploying folder ===="
@@ -188,7 +188,7 @@ pipeline {
             }
         }
 
-        stage('Deployment into tenant'){
+        stage('Upload to Tenant'){
                 steps{
                     script{
                         echo "====Deployment====="
