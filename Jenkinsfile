@@ -10,18 +10,18 @@ import java.util.Map
 import groovy.io.FileType
 import groovy.json.JsonSlurperClassic
 
-def ZIP_NODE
+def NAME_ZIPFILE
 def ZIP_WORKFLOW
 def jsonResponse
 String fileuploadUrl
 String postuploadfileuploadUrl
 def list = []
 String taskID
-String zipfilepath
+String path_zipfile
 String zip_workflowfilepath
 String includefilenames
 String filedata
-def jsonIncludefilepath 
+def path_filestobedeployed 
 def postdeploymentfilepath
 def statuscode
 def objectstatus
@@ -38,16 +38,16 @@ pipeline {
         stage('Initialization...') {
             steps {
                 script {
-                    ZIP_NODE = "${env.BRANCH_NAME}.zip"
+                    NAME_ZIPFILE = "${env.BRANCH_NAME}.zip"
                     ZIP_WORKFLOW = "postdeployment.zip"
-                    jsonIncludefilepath = "${env.WORKSPACE}/deployment-artifacts/includedfile.json"
-                    zipfilepath = "${env.WORKSPACE}/${ZIP_NODE}"
+                    path_filestobedeployed = "${env.WORKSPACE}/deployment-artifacts/filestobedeployed.json"
+                    path_zipfile = "${env.WORKSPACE}/${NAME_ZIPFILE}"
                     zip_workflowfilepath = "${env.WORKSPACE}/${ZIP_WORKFLOW}"
 
-                    println("ZIP_NODE: " + ZIP_NODE)
+                    println("NAME_ZIPFILE: " + NAME_ZIPFILE)
                     println("ZIP_WORKFLOW: " + ZIP_WORKFLOW)
-                    println("jsonIncludefilepath: " + jsonIncludefilepath)
-                    println("zipfilepath: " + zipfilepath)
+                    println("path_filestobedeployed: " + path_filestobedeployed)
+                    println("path_zipfile: " + path_zipfile)
                     println("zip_workflowfilepath: " + zip_workflowfilepath)
                 }
             }
@@ -56,7 +56,7 @@ pipeline {
         stage('prepare-package') {
             steps {
                 script {
-                    def includedFileObject = new File("${jsonIncludefilepath}")
+                    def includedFileObject = new File("${path_filestobedeployed}")
                     def includedFileJSONObject = new JsonSlurperClassic().parse(includedFileObject)
 
                     def includedFilenamesString = includedFileJSONObject.filename
@@ -83,11 +83,11 @@ pipeline {
                     println("Filenames processed successfully... Moving to zipping..")
 
                     bat """
-                    powershell.exe -Command "if (Test-Path '${zipfilepath}') { Remove-Item '${zipfilepath}' }"
-                    powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${zipfilepath}'"
+                    powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
+                    powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${path_zipfile}'"
                     """
 
-                    if (!fileExists(zipfilepath)) {
+                    if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
                     } else {
                         println("Files zipped successfully...")
@@ -99,7 +99,7 @@ pipeline {
         stage('creating folder') {
             steps {
                 script {
-                    def jsonobject = "{\"binaryStreamObject\":{\"id\":\"guid\",\"type\":\"seedDataStream\",\"properties\":{\"objectKey\":\"${ZIP_NODE}\",\"originalFileName\":\"${ZIP_NODE}\"}}}"
+                    def jsonobject = "{\"binaryStreamObject\":{\"id\":\"guid\",\"type\":\"seedDataStream\",\"properties\":{\"objectKey\":\"${NAME_ZIPFILE}\",\"originalFileName\":\"${NAME_ZIPFILE}\"}}}"
 
                     def post = new URL("https://etronds.riversand.com/api/binarystreamobjectservice/prepareUpload").openConnection();
                     def message = '{"message":"this is a message"}'
@@ -144,21 +144,21 @@ pipeline {
             steps {
                 script {
                     echo "====Deploying folder====="
-                    def encodedZipFilePath = URLEncoder.encode(zipfilepath, "UTF-8").replace("+", "%20")
+                    def encodedpath_zipfile = URLEncoder.encode(path_zipfile, "UTF-8").replace("+", "%20")
                     def encodedFileUploadUrl = URLEncoder.encode(fileuploadUrl, "UTF-8").replace("+", "%20")                    
                     bat """
                     CALL curl -v -X PUT "${fileuploadUrl}" ^
                         --header "x-ms-meta-x_rdp_userroles: systemadmin" ^
                         --header "x-ms-meta-x_rdp_tenantid: rdpclient" ^
-                        --header "x-ms-meta-originalfilename: ${ZIP_NODE}" ^
-                        --header "x-ms-blob-content-disposition: attachment; filename=${ZIP_NODE}" ^
+                        --header "x-ms-meta-originalfilename: ${NAME_ZIPFILE}" ^
+                        --header "x-ms-blob-content-disposition: attachment; filename=${NAME_ZIPFILE}" ^
                         --header "x-ms-meta-type: disposition" ^
                         --header "x-ms-meta-x_rdp_clientid: rdpclient" ^
                         --header "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com" ^
                         --header "x-ms-meta-binarystreamobjectid: guid" ^
                         --header "x-ms-blob-type: BlockBlob" ^
                         --header "Content-Type: application/zip" ^
-                        --data-binary "${zipfilepath}"
+                        --data-binary "${path_zipfile}"
                     """
                 }
             }
@@ -174,15 +174,15 @@ pipeline {
                         curl -v -X PUT "${encodedFileuploadUrl}" ^
                         --header "x-ms-meta-x_rdp_userroles: systemadmin" ^
                         --header "x-ms-meta-x_rdp_tenantid: etronds" ^
-                        --header "x-ms-meta-originalfilename: ${ZIP_NODE}" ^
-                        --header "x-ms-blob-content-disposition: attachment; filename=${ZIP_NODE}" ^
+                        --header "x-ms-meta-originalfilename: ${NAME_ZIPFILE}" ^
+                        --header "x-ms-blob-content-disposition: attachment; filename=${NAME_ZIPFILE}" ^
                         --header "x-ms-meta-type: disposition" ^
                         --header "x-ms-meta-x_rdp_clientid: rdpclient" ^
                         --header "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com" ^
                         --header "x-ms-meta-binarystreamobjectid: guid" ^
                         --header "x-ms-blob-type: BlockBlob" ^
                         --header "Content-Type: application/zip" ^
-                        --data-binary "@${zipfilepath}"
+                        --data-binary "@${path_zipfile}"
                     """
                 }
             }
@@ -192,7 +192,7 @@ pipeline {
                 steps{
                     script{
                         echo "====Deployment====="
-                        def jsonobject = "{\"adminObject\":{\"id\":\"someguid\",\"type\":\"adminObject\",\"properties\":{\"flushConfig\":false,\"storageType\":\"stream\",\"objectKey\":\"${ZIP_NODE}\",\"tenantId\":\"etronds\",\"retryCount\":1,\"sleepTime\":1000}}}"
+                        def jsonobject = "{\"adminObject\":{\"id\":\"someguid\",\"type\":\"adminObject\",\"properties\":{\"flushConfig\":false,\"storageType\":\"stream\",\"objectKey\":\"${NAME_ZIPFILE}\",\"tenantId\":\"etronds\",\"retryCount\":1,\"sleepTime\":1000}}}"
                         def post = new URL("https://etronds.riversand.com/api/adminservice/deploytenantseed").openConnection();
                         def message = '{"message":"this is a message"}'
                         post.setRequestMethod("POST")
@@ -228,7 +228,6 @@ pipeline {
                     }    
             }
         }
-
 
     }
 }
