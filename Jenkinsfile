@@ -33,7 +33,7 @@ def statusvalue
 String includedfile = ""
 
 @NonCPS
-def makeApiCallAndGetResponse() {
+def makeApiCallAndGetResponse(String taskID) {
     def post = new URL("https://etronds.riversand.com/api/requesttrackingservice/get").openConnection() as HttpURLConnection
     def requestData = '{"params":{"query":{"id":"' + taskID + '","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
     def message = '{"message":"this is a message"}'
@@ -279,7 +279,7 @@ pipeline {
                     def taskstatus = false
 
                     while (!taskstatus) {
-                        def responsess = makeApiCallAndGetResponse()
+                        def responsess = makeApiCallAndGetResponse(taskID)
 
                         // Process the response
                         println("task_mssage response: " + responsess)
