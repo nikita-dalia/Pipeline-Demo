@@ -284,19 +284,25 @@ pipeline {
 
                         // Process the response
                         println("task_mssage response: " + responsess)
-                        def jsonContent = readJSON text: responsess.trim()
-                        def totalRecord = jsonContent.response.totalRecords
 
-                        if (totalRecord == 1) {
-                            objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
-                            println("=========== objecttttt=found====" + objectstatus)
-                            if (objectstatus == "Completed" || objectstatus == "Completed with errors" || objectstatus == "Errored") {
-                                taskstatus = true
+                        node {
+                            // Run non-serializable operations on the agent
+                            def jsonSlurper = new groovy.json.JsonSlurper()
+                            def jsonContent = jsonSlurper.parseText(responsess.trim())
+                            def totalRecord = jsonContent.response.totalRecords
+
+                            if (totalRecord == 1) {
+                                objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
+                                println("=========== objecttttt=found====" + objectstatus)
+                                if (objectstatus == "Completed" || objectstatus == "Completed with errors" || objectstatus == "Errored") {
+                                    taskstatus = true
+                                }
+                            } else {
+                                statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
+                                println("===========no objecttttt=====" + statusDetail1msg)
                             }
-                        } else {
-                            statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
-                            println("===========no objecttttt=====" + statusDetail1msg)
                         }
+
                         if (!taskstatus) {
                             sleep(15000)
                         }
