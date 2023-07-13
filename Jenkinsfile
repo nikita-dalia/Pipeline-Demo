@@ -238,12 +238,12 @@ pipeline {
             steps {
                 script {
                     def completed = false
-                    
+
                     while (!completed) {
                         def post = new URL("https://etronds.riversand.com/api/requesttrackingservice/get").openConnection() as HttpURLConnection
                         def requestData = '{"params":{"query":{"id":"' + taskID + '","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
                         def message = '{"message":"this is a message"}'
-            
+
                         post.setRequestMethod("POST")
                         post.setDoOutput(true)
                         post.setRequestProperty("Content-Type", "application/zip")
@@ -254,40 +254,33 @@ pipeline {
                         post.setRequestProperty("x-rdp-userRoles", "systemadmin")
                         post.setRequestProperty("auth-client-id", "j29DTHa7m7VHucWbHg7VvYA75pUjBopS")
                         post.setRequestProperty("auth-client-secret", "J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB")
-            
+
                         post.connect()
-            
+
                         // Write the request data to the output stream
                         def outputStream = post.getOutputStream() as OutputStream
                         outputStream.write(requestData.getBytes("UTF-8"))
                         outputStream.flush()
                         outputStream.close()
-            
+
                         // Get the response from the input stream
                         def responseCode = post.getResponseCode()
                         def inputStream = (responseCode == HttpURLConnection.HTTP_OK) ? post.getInputStream() : post.getErrorStream()
-                        def reader = new BufferedReader(new InputStreamReader(inputStream))
-                        def responseBuilder = new StringBuilder()
-                        String line
-                        while ((line = reader.readLine()) != null) {
-                            responseBuilder.append(line)
-                        }
-                        def responsess = responseBuilder.toString()
-            
-                        reader.close()
+                        def responsess = inputStream.text
+
                         inputStream.close()
                         post.disconnect()
-            
+
                         // Process the response
                         println("task_mssage response: " + responsess)
                         def jsonSlurper = new JsonSlurper()
                         def jsonContent = jsonSlurper.parseText(responsess.trim())
                         def totalRecord = jsonContent.response.totalRecords
-            
+
                         if (totalRecord == 1) {
                             objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
                             println("=========== objecttttt=found====" + objectstatus)
-                            
+
                             if (objectstatus == "Completed") {
                                 completed = true
                             }
@@ -295,7 +288,7 @@ pipeline {
                             statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
                             println("===========no objecttttt=====" + statusDetail1msg)
                         }
-            
+
                         if (!completed) {
                             // Wait for 20 seconds before making the next API call
                             sleep(20000)
