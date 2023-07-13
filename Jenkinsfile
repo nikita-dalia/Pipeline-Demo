@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map
 import groovy.io.FileType
 import groovy.json.JsonSlurperClassic
+import hudson.model.*
 
 def NAME_ZIPFILE
 def ZIP_WORKFLOW
@@ -30,6 +31,49 @@ String statusDetail1msg = ""
 def status_final
 def statusvalue
 String includedfile = ""
+
+@NonCPS
+def makeApiCallAndGetResponse() {
+    def post = new URL("https://etronds.riversand.com/api/requesttrackingservice/get").openConnection() as HttpURLConnection
+    def requestData = '{"params":{"query":{"id":"' + taskID + '","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
+    def message = '{"message":"this is a message"}'
+
+    post.setRequestMethod("POST")
+    post.setDoOutput(true)
+    post.setRequestProperty("Content-Type", "application/zip")
+    post.setRequestProperty("x-rdp-version", "8.1")
+    post.setRequestProperty("x-rdp-tenantId", "etronds")
+    post.setRequestProperty("x-rdp-clientId", "rdpclient")
+    post.setRequestProperty("x-rdp-userId", "etronds.systemadmin@riversand.com")
+    post.setRequestProperty("x-rdp-userRoles", "systemadmin")
+    post.setRequestProperty("auth-client-id", "j29DTHa7m7VHucWbHg7VvYA75pUjBopS")
+    post.setRequestProperty("auth-client-secret", "J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB")
+
+    post.connect()
+
+    // Write the request data to the output stream
+    def outputStream = post.getOutputStream() as OutputStream
+    outputStream.write(requestData.getBytes("UTF-8"))
+    outputStream.flush()
+    outputStream.close()
+
+    // Get the response from the input stream
+    def responseCode = post.getResponseCode()
+    def inputStream = (responseCode == HttpURLConnection.HTTP_OK) ? post.getInputStream() : post.getErrorStream()
+    def reader = new BufferedReader(new InputStreamReader(inputStream))
+    def responseBuilder = new StringBuilder()
+    String line
+    while ((line = reader.readLine()) != null) {
+        responseBuilder.append(line)
+    }
+    def responsess = responseBuilder.toString()
+
+    reader.close()
+    inputStream.close()
+    post.disconnect()
+
+    return responsess
+}
 
 pipeline {
     agent any
@@ -232,46 +276,10 @@ pipeline {
         stage('Verify Upload') {
             steps {
                 script {
-                    def taskstatus=false;
+                    def taskstatus = false
 
-                    while(!taskstatus){
-                        def post = new URL("https://etronds.riversand.com/api/requesttrackingservice/get").openConnection() as HttpURLConnection
-                        def requestData = '{"params":{"query":{"id":"' + taskID + '","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
-                        def message = '{"message":"this is a message"}'
-
-                        post.setRequestMethod("POST")
-                        post.setDoOutput(true)
-                        post.setRequestProperty("Content-Type", "application/zip")
-                        post.setRequestProperty("x-rdp-version", "8.1")
-                        post.setRequestProperty("x-rdp-tenantId", "etronds")
-                        post.setRequestProperty("x-rdp-clientId", "rdpclient")
-                        post.setRequestProperty("x-rdp-userId", "etronds.systemadmin@riversand.com")
-                        post.setRequestProperty("x-rdp-userRoles", "systemadmin")
-                        post.setRequestProperty("auth-client-id", "j29DTHa7m7VHucWbHg7VvYA75pUjBopS")
-                        post.setRequestProperty("auth-client-secret", "J7UaRWQgxorI8mdfuu8y0mOLqzlIJo2hM3O4VfhX1PIeoa7CYVX_l0-BnHRtuSWB")
-
-                        post.connect()
-
-                        // Write the request data to the output stream
-                        def outputStream = post.getOutputStream() as OutputStream
-                        outputStream.write(requestData.getBytes("UTF-8"))
-                        outputStream.flush()
-                        outputStream.close()
-
-                        // Get the response from the input stream
-                        def responseCode = post.getResponseCode()
-                        def inputStream = (responseCode == HttpURLConnection.HTTP_OK) ? post.getInputStream() : post.getErrorStream()
-                        def reader = new BufferedReader(new InputStreamReader(inputStream))
-                        def responseBuilder = new StringBuilder()
-                        String line
-                        while ((line = reader.readLine()) != null) {
-                            responseBuilder.append(line)
-                        }
-                        def responsess = responseBuilder.toString()
-
-                        reader.close()
-                        inputStream.close()
-                        post.disconnect()
+                    while (!taskstatus) {
+                        def responsess = makeApiCallAndGetResponse()
 
                         // Process the response
                         println("task_mssage response: " + responsess)
@@ -282,17 +290,16 @@ pipeline {
                         if (totalRecord == 1) {
                             objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
                             println("=========== objecttttt=found====" + objectstatus)
-                            if(objectstatus=="Completed" || objectstatus=="Completed with errors" || objectstatus=="Errored"){
-                                taskstatus=true
+                            if (objectstatus == "Completed" || objectstatus == "Completed with errors" || objectstatus == "Errored") {
+                                taskstatus = true
                             }
                         } else {
                             statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
                             println("===========no objecttttt=====" + statusDetail1msg)
-                        }   
-                        if(!taskstatus){
+                        }
+                        if (!taskstatus) {
                             sleep(15000)
-                        }                   
-                        
+                        }
                     }
                 }
             }
