@@ -9,11 +9,6 @@ import java.util.Iterator;
 import java.util.Map
 import groovy.io.FileType
 import groovy.json.JsonSlurperClassic
-import java.net.HttpURLConnection
-import java.net.URL
-import java.io.OutputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 def NAME_ZIPFILE
 def ZIP_WORKFLOW
@@ -237,9 +232,9 @@ pipeline {
         stage('Verify Upload') {
             steps {
                 script {
-                    def completed = false
+                    def taskstatus=false;
 
-                    while (!completed) {
+                    while(!taskstatus){
                         def post = new URL("https://etronds.riversand.com/api/requesttrackingservice/get").openConnection() as HttpURLConnection
                         def requestData = '{"params":{"query":{"id":"' + taskID + '","filters":{"typesCriterion":["tasksummaryobject"]}},"fields":{"attributes":["_ALL"],"relationships":["_ALL"]},"options":{"maxRecords":1000}}}'
                         def message = '{"message":"this is a message"}'
@@ -266,8 +261,15 @@ pipeline {
                         // Get the response from the input stream
                         def responseCode = post.getResponseCode()
                         def inputStream = (responseCode == HttpURLConnection.HTTP_OK) ? post.getInputStream() : post.getErrorStream()
-                        def responsess = inputStream.text
+                        def reader = new BufferedReader(new InputStreamReader(inputStream))
+                        def responseBuilder = new StringBuilder()
+                        String line
+                        while ((line = reader.readLine()) != null) {
+                            responseBuilder.append(line)
+                        }
+                        def responsess = responseBuilder.toString()
 
+                        reader.close()
                         inputStream.close()
                         post.disconnect()
 
@@ -280,19 +282,17 @@ pipeline {
                         if (totalRecord == 1) {
                             objectstatus = jsonContent.response.requestObjects[0].data.attributes.status.values[0].value
                             println("=========== objecttttt=found====" + objectstatus)
-
-                            if (objectstatus == "Completed") {
-                                completed = true
+                            if(objectstatus=="Completed" || objectstatus=="Completed with errors" || objectstatus=="Errored"){
+                                taskstatus=true
                             }
                         } else {
                             statusDetail1msg = jsonContent.response.statusDetail.messages[0].message
                             println("===========no objecttttt=====" + statusDetail1msg)
-                        }
-
-                        if (!completed) {
-                            // Wait for 20 seconds before making the next API call
-                            sleep(20000)
-                        }
+                        }   
+                        if(!taskstatus){
+                            sleep(15000)
+                        }                   
+                        
                     }
                 }
             }
