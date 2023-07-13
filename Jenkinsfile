@@ -304,7 +304,7 @@ pipeline {
                         }
 
                         if (!taskstatus) {
-                            sleep(15)
+                            sleep(30)
                         }
                     }
                 }
