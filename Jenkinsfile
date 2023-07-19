@@ -119,7 +119,7 @@ pipeline {
                         println("Final included files: " + includedfile)
                     } else {
                         // The string does not contain a comma
-                        includedfile = includedFilenamesString
+                        includedfile = "'${env.WORKSPACE}" + "\\" + includedFilenamesString + "'"
                         println("No comma present" + includedfile)
                     }
 
