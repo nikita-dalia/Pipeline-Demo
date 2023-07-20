@@ -119,7 +119,6 @@ pipeline {
                         println("Final included files: " + includedfile)
                     } else {
                         // The string does not contain a comma
-                        includedFilenamesString.trim().replaceAll("\\[|\\]", "")
                         includedfile = "'${env.WORKSPACE}" + "\\" + includedFilenamesString + "'"
                         println("No comma present" + includedfile)
                     }
