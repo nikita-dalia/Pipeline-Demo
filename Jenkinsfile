@@ -119,7 +119,12 @@ pipeline {
                         println("Final included files: " + includedfile)
                     } else {
                         // The string does not contain a comma
-                        includedfile = "'${env.WORKSPACE}" + "\\" + includedFilenamesString + "'"
+                        // Assuming includedFilenamesString is an ArrayList, extract a string element
+                        String filenamesString = includedFilenamesString.get(0)
+
+                        // Trim leading and trailing whitespace, and remove square brackets
+                        filenamesString = filenamesString.trim().replaceAll("\\[|\\]", "")
+                        includedfile = "'${env.WORKSPACE}" + "\\" + filenamesString + "'"
                         println("No comma present" + includedfile)
                     }
 
