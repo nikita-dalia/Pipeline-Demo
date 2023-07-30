@@ -31,6 +31,8 @@ String statusDetail1msg = ""
 def status_final
 def statusvalue
 String includedfile = ""
+def tenant="DS"
+def tenantstobeexcluded
 
 @NonCPS
 def makeApiCallAndGetResponse(String taskID) {
@@ -131,11 +133,25 @@ pipeline {
                     println("Final included files: " + includedfile)
                     println("Filenames processed successfully... Moving to zipping..")
 
-                    bat """
+                    if(tenant=="DS"){
+                        tenantstobeexcluded=['FS','PROD']
+                    }
+                    else if(tenant="FS"){
+                        tenantstobeexcluded=['DS','PROD']
+                    }
+                    else{
+                        tenantstobeexcluded=['FS','DS']
+                    }
+
+
+                    /*bat """
                     powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
                     powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${path_zipfile}'"
+                    """*/
+                    bat """
+                        powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
+                        powershell.exe -Command "Compress-Archive -Path @(\${includedfile} | Where-Object { \$_ -notin ${tenantstobeexcluded.inspect()} }) -DestinationPath '\${path_zipfile}'"
                     """
-
                     if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
                     } else {
@@ -144,7 +160,7 @@ pipeline {
                 }
             }
         }
-        
+        /*
         stage('Prepare Upload') {
             steps {
                 script {
@@ -189,29 +205,6 @@ pipeline {
             }
         }
 
-        /*stage('Deploying folder') {
-            steps {
-                script {
-                    echo "====Deploying folder====="
-                    def encodedpath_zipfile = URLEncoder.encode(path_zipfile, "UTF-8").replace("+", "%20")
-                    def encodedFileUploadUrl = URLEncoder.encode(fileuploadUrl, "UTF-8").replace("+", "%20")                    
-                    bat """
-                    CALL curl -v -X PUT "${fileuploadUrl}" ^
-                        --header "x-ms-meta-x_rdp_userroles: systemadmin" ^
-                        --header "x-ms-meta-x_rdp_tenantid: rdpclient" ^
-                        --header "x-ms-meta-originalfilename: ${NAME_ZIPFILE}" ^
-                        --header "x-ms-blob-content-disposition: attachment; filename=${NAME_ZIPFILE}" ^
-                        --header "x-ms-meta-type: disposition" ^
-                        --header "x-ms-meta-x_rdp_clientid: rdpclient" ^
-                        --header "x-ms-meta-x_rdp_userid: etronds.systemadmin@riversand.com" ^
-                        --header "x-ms-meta-binarystreamobjectid: guid" ^
-                        --header "x-ms-blob-type: BlockBlob" ^
-                        --header "Content-Type: application/zip" ^
-                        --data-binary "${path_zipfile}"
-                    """
-                }
-            }
-        }*/
         stage('Deploy Files') {
             steps {
                 script {
@@ -315,6 +308,7 @@ pipeline {
                 }
             }
         }
+         */
 
     }
 }
