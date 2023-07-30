@@ -136,7 +136,7 @@ pipeline {
                     if(tenant=="DS"){
                         tenantstobeexcluded=['FS','PROD']
                     }
-                    else if(tenant="FS"){
+                    else if(tenant=="FS"){
                         tenantstobeexcluded=['DS','PROD']
                     }
                     else{
