@@ -134,13 +134,13 @@ pipeline {
                     println("Filenames processed successfully... Moving to zipping..")
 
                     if(tenant=="DS"){
-                        tenantstobeexcluded=['FS','PROD']
+                        tenantstobeexcluded="FS,PROD"
                     }
                     else if(tenant=="FS"){
-                        tenantstobeexcluded=['DS','PROD']
+                        tenantstobeexcluded="DS,PROD"
                     }
                     else{
-                        tenantstobeexcluded=['FS','DS']
+                        tenantstobeexcluded="FS,DS"
                     }
 
 
@@ -148,16 +148,16 @@ pipeline {
                     powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
                     powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${path_zipfile}'"
                     """*/
-                    /*bat """
-                        powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
-                        powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { \$_ -notin ${tenantstobeexcluded.inspect()} }) -DestinationPath '${path_zipfile}'"
-                    """*/
                     bat """
+                        powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
+                        powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { \$_ -notin ${tenantstobeexcluded} }) -DestinationPath '${path_zipfile}'"
+                    """
+                    /*bat """
                         \$excludedFolders = ${tenantstobeexcluded.collect { "'$_'" }.join(',')}
                         \$includedFolders = Get-ChildItem -LiteralPath '${includedfile}'
                         \$filteredFolders = \$includedFolders | Where-Object { \$excludedFolders -notcontains \$_.Name }
                         Compress-Archive -Path \$filteredFolders.FullName -DestinationPath '${path_zipfile}'
-                    """
+                    """*/
                     if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
                     } else {
