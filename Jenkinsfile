@@ -134,13 +134,13 @@ pipeline {
                     println("Filenames processed successfully... Moving to zipping..")
 
                     if(tenant=="DS"){
-                        tenantstobeexcluded="FS","PROD"
+                        tenantstobeexcluded=["FS","PROD"]
                     }
                     else if(tenant=="FS"){
-                        tenantstobeexcluded="DS","PROD"
+                        tenantstobeexcluded=["DS","PROD"]
                     }
                     else{
-                        tenantstobeexcluded="FS","DS"
+                        tenantstobeexcluded=["FS","DS"]
                     }
 
 
