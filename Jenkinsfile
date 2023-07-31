@@ -150,7 +150,7 @@ pipeline {
                     """*/
                     bat """
                         powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
-                        powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { \\$_ -notin ${tenantstobeexcluded.inspect()} }) -DestinationPath '${path_zipfile}'"
+                        powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { $$_ -notin ${tenantstobeexcluded.inspect()} }) -DestinationPath '${path_zipfile}'"
                     """
                     if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
