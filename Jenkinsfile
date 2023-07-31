@@ -151,10 +151,14 @@ pipeline {
                     // Convert the array to a comma-separated string to pass as an environment variable
                     def excludedFoldersEnv = tenantstobeexcluded.join(',')
 
-                    bat """
-                        powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
-                        powershell.exe -Command "Compress-Archive -Path @(Get-ChildItem '${includedfile}' | Where-Object { `$_ -notin ('$excludedFoldersEnv' -split ',') }) -DestinationPath '${path_zipfile}'"
+                    def powershellScript = """
+                        \$env:excludedFoldersEnv = '${excludedFoldersEnv}'
+                        if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }
+                        Compress-Archive -Path @(Get-ChildItem '${includedfile}' | Where-Object { \$_.Name -notin \$env:excludedFoldersEnv.split(',') }) -DestinationPath '${path_zipfile}'
                     """
+
+                    // Execute the PowerShell script using the bat step
+                    bat "powershell.exe -Command \"${powershellScript}\""
                     if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
                     } else {
