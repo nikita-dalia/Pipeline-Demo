@@ -150,7 +150,7 @@ pipeline {
                     """*/
                     bat """
                         powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
-                        powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { ${tenantstobeexcluded} -notcontains \$_ }) -DestinationPath '${path_zipfile}'"
+                        powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { '${tenantstobeexcluded.inspect()'} -notcontains \$_ }) -DestinationPath '${path_zipfile}'"
                     """
                     /*bat """
                         \$excludedFolders = ${tenantstobeexcluded.collect { "'$_'" }.join(',')}
