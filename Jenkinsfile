@@ -148,16 +148,13 @@ pipeline {
                     powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
                     powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${path_zipfile}'"
                     """*/
+                    // Convert the array to a comma-separated string to pass as an environment variable
+                    def excludedFoldersEnv = tenantstobeexcluded.join(',')
+
                     bat """
                         powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
-                        powershell.exe -Command "Compress-Archive -Path @(Get-ChildItem '${includedfile}' | Where-Object { ${tenantstobeexcluded.collect { "'\$_.Name'" }.join(', ') } -notcontains \$_.Name }) -DestinationPath '${path_zipfile}'"
+                        powershell.exe -Command "Compress-Archive -Path @(Get-ChildItem '${includedfile}' | Where-Object { `$_ -notin ('$excludedFoldersEnv' -split ',') }) -DestinationPath '${path_zipfile}'"
                     """
-                    /*bat """
-                        \$excludedFolders = ${tenantstobeexcluded.collect { "'$_'" }.join(',')}
-                        \$includedFolders = Get-ChildItem -LiteralPath '${includedfile}'
-                        \$filteredFolders = \$includedFolders | Where-Object { \$excludedFolders -notcontains \$_.Name }
-                        Compress-Archive -Path \$filteredFolders.FullName -DestinationPath '${path_zipfile}'
-                    """*/
                     if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
                     } else {
