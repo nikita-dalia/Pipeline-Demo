@@ -148,9 +148,15 @@ pipeline {
                     powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
                     powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${path_zipfile}'"
                     """*/
-                    bat """
+                    /*bat """
                         powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
                         powershell.exe -Command "Compress-Archive -Path @(${includedfile} | Where-Object { \$_ -notin ${tenantstobeexcluded.inspect()} }) -DestinationPath '${path_zipfile}'"
+                    """*/
+                    bat """
+                        \$excludedFolders = ${tenantstobeexcluded.collect { "'$_'" }.join(',')}
+                        \$includedFolders = Get-ChildItem -LiteralPath '${includedfile}'
+                        \$filteredFolders = \$includedFolders | Where-Object { \$excludedFolders -notcontains \$_.Name }
+                        Compress-Archive -Path \$filteredFolders.FullName -DestinationPath '${path_zipfile}'
                     """
                     if (!fileExists(path_zipfile)) {
                         error("Failed to create the zip file.")
