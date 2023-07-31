@@ -150,7 +150,7 @@ pipeline {
                     """*/
                     bat """
                         powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
-                        powershell.exe -Command "Compress-Archive -Path @(Get-ChildItem '${includedfile}' | Where-Object { ${tenantstobeexcluded.collect { "'`\\\$_.Name'" }.join(', ') } -notcontains `\$_.Name }) -DestinationPath '${path_zipfile}'"
+                        powershell.exe -Command "Compress-Archive -Path @(Get-ChildItem '${includedfile}' | Where-Object { ${tenantstobeexcluded.collect { "'\$_.Name'" }.join(', ') } -notcontains \$_.Name }) -DestinationPath '${path_zipfile}'"
                     """
                     /*bat """
                         \$excludedFolders = ${tenantstobeexcluded.collect { "'$_'" }.join(',')}
