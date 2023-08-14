@@ -33,6 +33,9 @@ def statusvalue
 String includedfile = ""
 def tenant="DS"
 def tenantstobeexcluded
+def DSfullpath
+def FSfillpath
+def PRODfullpath
 
 @NonCPS
 def makeApiCallAndGetResponse(String taskID) {
@@ -149,7 +152,7 @@ pipeline {
                     powershell.exe -Command "Compress-Archive -Path @(${includedfile}) -DestinationPath '${path_zipfile}'"
                     """*/
                     // Convert the array to a comma-separated string to pass as an environment variable
-                    def excludedFoldersArgs = tenantstobeexcluded.collect { "'${it}'" }.join(',')
+                    /*def excludedFoldersArgs = tenantstobeexcluded.collect { "'${it}'" }.join(',')
 
                     bat """
                         powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
@@ -159,7 +162,43 @@ pipeline {
                         error("Failed to create the zip file.")
                     } else {
                         println("Files zipped successfully...")
+                    }*/
+                    // Construct the array of included files
+                    def includedFilesArray = includedfile.split(',').collect { it.replaceAll("'", "").trim() }
+
+                    // Construct the list of files to be included in the zip
+                    def filesToCompress = []
+                    
+                    includedFilesArray.each { includedFilePath ->
+                        def includedFile = new File(includedFilePath)
+                        if (includedFile.isDirectory()) {
+                            def includedFilesList = includedFile.listFiles().findAll { file ->
+                                !tenantstobeexcluded.any { excludedItem -> file.toString().contains(includedFilePath + File.separator + excludedItem) }
+                            }
+                            filesToCompress.addAll(includedFilesList)
+                        } else if (includedFile.isFile()) {
+                            filesToCompress.add(includedFile)
+                        }
                     }
+
+                    if (filesToCompress.empty) {
+                        println("No files to compress.")
+                    } else {
+                        // Construct the list of file paths to pass to the PowerShell command
+                        def filesToCompressPaths = filesToCompress.collect { "'${it.absolutePath}'" }.join(',')
+                        
+                        bat """
+                            powershell.exe -Command "if (Test-Path '${path_zipfile}') { Remove-Item '${path_zipfile}' }"
+                            powershell.exe -Command "Compress-Archive -Path @(${filesToCompressPaths}) -DestinationPath '${path_zipfile}'"
+                        """
+                        
+                        if (!fileExists(path_zipfile)) {
+                            error("Failed to create the zip file.")
+                        } else {
+                            println("Files zipped successfully...")
+                        }
+                    }                    
+
                 }
             }
         }
