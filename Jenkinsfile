@@ -10,6 +10,7 @@ import java.util.Map
 import groovy.io.FileType
 import groovy.json.JsonSlurperClassic
 import hudson.model.*
+import java.io.File
 
 def NAME_ZIPFILE
 def ZIP_WORKFLOW
