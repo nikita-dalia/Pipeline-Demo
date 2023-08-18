@@ -106,7 +106,7 @@ pipeline {
         stage('Zipping Files') {
             steps {
                 script {
-                    def includedFileObject = new File(path_filestobedeployed)
+                    def includedFileObject = workspace.file(path_filestobedeployed)
                     def includedFileJSONObject = new JsonSlurperClassic().parse(includedFileObject)
 
                     def includedFilenamesString = includedFileJSONObject.filename
