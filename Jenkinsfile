@@ -182,7 +182,7 @@ pipeline {
                         }
                     }
 
-                    if (filesToCompress.empty) {
+                    if (filesToCompress.isEmpty()) {
                         println("No files to compress.")
                     } else {
                         // Construct the list of file paths to pass to the PowerShell command
